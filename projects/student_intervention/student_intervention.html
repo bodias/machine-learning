@@ -11876,14 +11876,14 @@ This is a classical classification problem, because the goal is to give a label 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Calculate number of students</span>
 <span class="n">n_students</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c1"># TODO: Calculate number of features</span>
-<span class="n">n_features</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">n_features</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="c1"># TODO: Calculate passing students</span>
 <span class="n">n_passed</span> <span class="o">=</span> <span class="n">student_data</span><span class="p">[</span><span class="n">student_data</span><span class="p">[</span><span class="s1">&#39;passed&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;yes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -11917,7 +11917,7 @@ This is a classical classification problem, because the goal is to give a label 
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Total number of students: 395
-Number of features: 31
+Number of features: 30
 Number of students who passed: 265
 Number of students who failed: 130
 Graduation rate of the class: 67.09%
@@ -11942,7 +11942,7 @@ Graduation rate of the class: 67.09%
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Extract feature columns</span>
@@ -12027,7 +12027,7 @@ Feature values:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">preprocess_features</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
@@ -12101,7 +12101,7 @@ Feature values:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import any additional functionality you may need here</span>
@@ -12219,7 +12219,7 @@ Testing set has 95 samples.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">train_classifier</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
@@ -12291,7 +12291,7 @@ Testing set has 95 samples.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import the three supervised learning models from sklearn</span>
@@ -12353,40 +12353,40 @@ Testing set has 95 samples.
 <pre>
 Classifier A
 Training a RandomForestClassifier using a training set size of 100. . .
-Trained model in 0.0358 seconds
+Trained model in 0.0227 seconds
 Made predictions in 0.0012 seconds.
-F1 score for training set: 0.9677.
-Made predictions in 0.0010 seconds.
-F1 score for test set: 0.7302.
+F1 score for training set: 0.9922.
+Made predictions in 0.0011 seconds.
+F1 score for test set: 0.7188.
 Training a RandomForestClassifier using a training set size of 200. . .
-Trained model in 0.0238 seconds
-Made predictions in 0.0014 seconds.
+Trained model in 0.0210 seconds
+Made predictions in 0.0012 seconds.
 F1 score for training set: 0.9928.
-Made predictions in 0.0011 seconds.
-F1 score for test set: 0.7538.
+Made predictions in 0.0010 seconds.
+F1 score for test set: 0.7368.
 Training a RandomForestClassifier using a training set size of 300. . .
-Trained model in 0.0215 seconds
-Made predictions in 0.0015 seconds.
-F1 score for training set: 0.9976.
+Trained model in 0.0221 seconds
+Made predictions in 0.0014 seconds.
+F1 score for training set: 0.9878.
 Made predictions in 0.0011 seconds.
-F1 score for test set: 0.7576.
+F1 score for test set: 0.7391.
 
 Classifier B
 Training a SVC using a training set size of 100. . .
-Trained model in 0.0014 seconds
-Made predictions in 0.0008 seconds.
+Trained model in 0.0013 seconds
+Made predictions in 0.0009 seconds.
 F1 score for training set: 0.8777.
 Made predictions in 0.0008 seconds.
 F1 score for test set: 0.7746.
 Training a SVC using a training set size of 200. . .
-Trained model in 0.0033 seconds
-Made predictions in 0.0023 seconds.
+Trained model in 0.0034 seconds
+Made predictions in 0.0024 seconds.
 F1 score for training set: 0.8679.
 Made predictions in 0.0013 seconds.
 F1 score for test set: 0.7815.
 Training a SVC using a training set size of 300. . .
 Trained model in 0.0071 seconds
-Made predictions in 0.0051 seconds.
+Made predictions in 0.0052 seconds.
 F1 score for training set: 0.8761.
 Made predictions in 0.0018 seconds.
 F1 score for test set: 0.7838.
@@ -12394,22 +12394,34 @@ F1 score for test set: 0.7838.
 Classifier C
 Training a LogisticRegression using a training set size of 100. . .
 Trained model in 0.0014 seconds
-Made predictions in 0.0205 seconds.
+Made predictions in 0.0185 seconds.
 F1 score for training set: 0.8593.
-Made predictions in 0.0003 seconds.
+Made predictions in 0.0005 seconds.
 F1 score for test set: 0.7647.
 Training a LogisticRegression using a training set size of 200. . .
-Trained model in 0.0038 seconds
-Made predictions in 0.0005 seconds.
-F1 score for training set: 0.8562.
+Trained model in 0.0037 seconds
 Made predictions in 0.0004 seconds.
+F1 score for training set: 0.8562.
+Made predictions in 0.0005 seconds.
 F1 score for test set: 0.7914.
 Training a LogisticRegression using a training set size of 300. . .
-Trained model in 0.0031 seconds
+Trained model in 0.0042 seconds
 Made predictions in 0.0003 seconds.
 F1 score for training set: 0.8468.
 Made predictions in 0.0003 seconds.
 F1 score for test set: 0.8060.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/braian/anaconda2/envs/ml/lib/python2.7/site-packages/sklearn/ensemble/weight_boosting.py:29: DeprecationWarning: numpy.core.umath_tests is an internal NumPy module and should not be imported. It will be removed in a future NumPy release.
+  from numpy.core.umath_tests import inner1d
 </pre>
 </div>
 </div>
@@ -12560,9 +12572,8 @@ F1 score for test set: 0.8060.
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
-<p>Based on the experiments presented on the table above, RandomForest looks overfitted, and LogisticRegression had the best F1 score. However, difference between scores wasn't so big, so I chose SVM. 
-It's results on the three runs were more stable, and as we have few data points I think with appropriate fine tunning it will perform better then the other models.
-It is important to note that training time could be an issue when performed a grid search.</p>
+<p>Based on the experiments presented on the table above, RandomForest looks overfitted, and LogisticRegression had the best F1 score. SVM had stable results on F1 score, but the prediction time incresed after adding more training data. I can say that the difference between scores wasn't so big, something around 0.5 comparing with the same amount of data.
+Due to the good performance of LogisticRegression, with the best training and prediction time, and also the best accuracy among the tested models, I will select it as the model to proceed with the fine tunning phase.</p>
 
 </div>
 </div>
@@ -12581,7 +12592,7 @@ It is important to note that training time could be an issue when performed a gr
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
-<p>SVM is a supervised machine learning algorithm which tries to find the best hyper-plane (a line in a multi-dimensional space) that segregates two classes. During the training phase it will measure the distance from each data point near the frontier between the two classes, a.k.a as support vectors, and will optmize the margin so the prediction will be more accurate. To predict an output it simply uses the trained model to verify wich side of the hyper-plane the input is.</p>
+<p>LogisticRegression is a supervised machine learning algorithm that outputs the probability of a given input point belongs to a certain class. Using our current experiment as an example, each student will have a score saying if he/she is  likely to pass (class passed=yes) or unlikely to pass (class passed=no). The underlying magic of Logistic Regression is the assumption that your input space (input data) can be separated into two nice ‘regions’, one for each class, by a linear boundary. During the training phase, this line that splits the data will be set to be the optimal separator of the input space. To predict a class based on a new instance, the model outputs the probability to a class (one of the two classes, in this case we are using "yes"), so if the probability is greater than 0.5 then it belongs to the "yes" class .</p>
 
 </div>
 </div>
@@ -12611,7 +12622,7 @@ It is important to note that training time could be an issue when performed a gr
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[60]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import &#39;GridSearchCV&#39; and &#39;make_scorer&#39;</span>
@@ -12619,15 +12630,15 @@ It is important to note that training time could be an issue when performed a gr
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_scorer</span>
 
 <span class="c1"># TODO: Create the parameters list you wish to tune</span>
-<span class="n">C</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1000</span><span class="p">]</span>
-<span class="n">gamma</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
-<span class="n">degree</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
-<span class="n">kernel</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">]</span>
+<span class="n">penalty</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">]</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">solver</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;liblinear&#39;</span><span class="p">,</span><span class="s1">&#39;saga&#39;</span><span class="p">]</span>
+
 <span class="c1"># Create hyperparameter options</span>
-<span class="n">parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span><span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span><span class="n">degree</span><span class="o">=</span><span class="n">degree</span><span class="p">)</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="n">penalty</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">)</span>
 
 <span class="c1"># TODO: Initialize the classifier</span>
-<span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">()</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
 
 <span class="c1"># TODO: Make an f1 scoring function using &#39;make_scorer&#39; </span>
 <span class="n">f1_scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">f1_score</span><span class="p">,</span> <span class="n">pos_label</span><span class="o">=</span><span class="s1">&#39;yes&#39;</span><span class="p">)</span>
@@ -12635,7 +12646,8 @@ It is important to note that training time could be an issue when performed a gr
 <span class="c1"># TODO: Perform grid search on the classifier using the f1_scorer as the scoring method</span>
 <span class="n">grid_obj</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span>
                         <span class="n">param_grid</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
-                        <span class="n">scoring</span><span class="o">=</span><span class="n">f1_scorer</span><span class="p">)</span>
+                        <span class="n">scoring</span><span class="o">=</span><span class="n">f1_scorer</span><span class="p">,</span>
+                        <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="c1"># TODO: Fit the grid search object to the training data and find the optimal parameters</span>
 <span class="n">grid_obj</span> <span class="o">=</span> <span class="n">grid_obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
@@ -12662,10 +12674,22 @@ It is important to note that training time could be an issue when performed a gr
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Made predictions in 0.0048 seconds.
-Tuned model has a training F1 score of 0.8482.
-Made predictions in 0.0018 seconds.
-Tuned model has a testing F1 score of 0.7733.
+<pre>Fitting 3 folds for each of 40 candidates, totalling 120 fits
+Made predictions in 0.0002 seconds.
+Tuned model has a training F1 score of 0.8380.
+Made predictions in 0.0003 seconds.
+Tuned model has a testing F1 score of 0.7857.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[Parallel(n_jobs=1)]: Done 120 out of 120 | elapsed:    2.6s finished
 </pre>
 </div>
 </div>
@@ -12688,8 +12712,10 @@ Tuned model has a testing F1 score of 0.7733.
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
-<p>Well, the F1 score didn't improve too much. Even trying several different parameters, the final score decreased from 0.87/0.78 to 0.84/0.77, respectively F1 score on training and test set.
-I believe the dataset is too small to generalize the actual behavior, then to improve it would be needed more data.</p>
+<p>Well, the F1 score didn't improve, actually the F1 score decreased. Even trying several different parameters, the final score decreased from 0.84/0.80 to 0.83/0.78, respectively F1 score on training and test set.
+The classifier params are a little bit tricky to use on Grid Search. There are solvers (newton-cg, lbfgs) that only work with L2 penalty, so I cannot add them because the way grid search works it creates a cartesian product of each param, so the classifier fails for some of these combinations.
+I believe the dataset is too small to generalize the actual behavior, then to improve it would be needed more data.
+Also, doing some feature engineering could lead to a better score.</p>
 
 </div>
 </div>
