@@ -14,8 +14,10 @@ Financial institutions, in general, always try to measure the likelihood of a cu
 Alhtough this is not a new subject, the evolution of machine learning algorithms have helped to spread the utilization of them, as we can see in Flint's work named *"Predicting Student Loan Defaults"* and Chang, Dae-oong Kim and Kondo work named *"Predicting Default Risk of Lending Club Loans"* . The former tried to address the risk associated with student loans back in 1997, and the latter expressed its methods to achieve good results in a peer-to-peer lending company. 
 
 **References :**
+
 Thomas A. Flint, The Journal of Higher Education. Vol. 68, No. 3 (May - Jun., 1997), pp. 322-354
-<BR>Shunpo Chang, Dae-oong, Kondo. Predicting Default Risk of Lending Club Loans. Stanford University.
+
+Shunpo Chang, Dae-oong, Kondo. Predicting Default Risk of Lending Club Loans. Stanford University.
 
 ### Problem Statement
 
