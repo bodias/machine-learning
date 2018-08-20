@@ -4,7 +4,7 @@ Braian O. Dias
 August, 2018
 
 ## Proposal
-Financial data is growing exponentially, helping institutions to improve their relationships with customers, offering tailor made products and reducing the overall risk of a credit operation. Kaggle offers a great oportunity to make good use of machine learning techniques to address a real world problem in a financial institution which borrows money to people that are currently underserved with loans. The main goal of the Kaggle challenge named [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk) sponsored by Home Credit Group, is to makes use of a variety of alternative data to predict their clients' repayment abilities.
+Financial data is growing exponentially, helping institutions to improve their relationships with customers, offering tailor made products and reducing the overall risk of a credit operation. Kaggle offers a great opportunity to make good use of machine learning techniques to address a real world problem in a financial institution which borrows money to people that are currently underserved with loans. The main goal of the Kaggle challenge named [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk) sponsored by Home Credit Group, is to make use of a variety of alternative data to predict their clients' repayment abilities.
 
 This project will try to answer the main challenge question, "Can you predict how capable each applicant is of repaying a loan?" with a decent accuracy, taking into account the results of others challege's applicants. All the data needed to develop the solution is available on Kaggle.
 
@@ -24,7 +24,7 @@ Home Credit is trying to minimize its loss due to loan defaults in a way that th
 ### Datasets and Inputs
 _(approx. 2-3 paragraphs)_
 
-The data provided by Kaggle is comprised of 8 csv files, the description presented below was extracted from [kaggle documentation](https://www.kaggle.com/c/home-credit-default-risk/data).
+The data provided by Kaggle is comprised of 8 CSV files, the description presented below was extracted from [kaggle documentation](https://www.kaggle.com/c/home-credit-default-risk/data).
 
 1. application_{train|test}.csv
 
@@ -69,31 +69,28 @@ This file contains descriptions for the columns in the various data files.
 
 ### Solution Statement
 
-
-
-In this section, clearly describe a solution to the problem. The solution should be applicable to the project domain and appropriate for the dataset(s) or input(s) given. Additionally, describe the solution thoroughly such that it is clear that the solution is quantifiable (the solution can be expressed in mathematical or logical terms) , measurable (the solution can be measured by some metric and clearly observed), and replicable (the solution can be reproduced and occurs more than once).
+To answer the main challenge question, "Can you predict how capable each applicant is of repaying a loan?", a Supervised Machine Learning model will be trained using the data described in the previous section. This will outputs a classifier which will outputs, given some input data, if the customer is able to repay the loan.
+The selected classification algorithms are Random Forests, Logistic Regression and SVM. The Performance of each one will be observed and the the model that gives the best ROC curve will be selected. 
 
 ### Benchmark Model
-_(approximately 1-2 paragraphs)_
 
-In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail.
+Once this project uses Kaggle Challenge data, the leaderboard score will be used as benchmark. 
+This is a good metric because it's possible to compare solutions to the exact same problem.
 
 ### Evaluation Metrics
 _(approx. 1-2 paragraphs)_
 
-In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
+The evaluation of the model will be assessed using area under the ROC curve between the predicted probability and the observed target. This is the metric defined by the Kaggle challenge and the goal is to score close to the top performers, or above the 3rd quartile.
 
 ### Project Design
-_(approx. 1 page)_
 
-In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
+The approach to solve the classification problem will follow the steps below :
+1. Exploratory Analysis : Descriptive statistics of the data, outliers detection, correlation matrix, scatter plot matrix.
+2. Cleaning/Transform data : Feature selection, feature scaling 
+3. Model training : Train the model using the preprocessed input. The selected classification algorithms are Random Forests, Logistic Regression and SVM. Each model will be assessed using validation data and the one with the best accuracy will be selected for the next step.
+4. Model selection : Select the best model after hyper parameters optimization
+5. Run classifier on test data and collect final results.
 
------------
+Below is a diagram of the overall architecture:
+![Project Design flow](/images/project_design.png)
 
-**Before submitting your proposal, ask yourself. . .**
-
-- Does the proposal you have written follow a well-organized structure similar to that of the project template?
-- Is each section (particularly **Solution Statement** and **Project Design**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
-- Would the intended audience of your project be able to understand your proposal?
-- Have you properly proofread your proposal to assure there are minimal grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
