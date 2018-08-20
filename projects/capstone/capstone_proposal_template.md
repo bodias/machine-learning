@@ -11,10 +11,11 @@ This project will try to answer the main challenge question, *"Can you predict h
 ### Domain Background
 
 Financial institutions, in general, always try to measure the likelihood of a customer to pay a loan, using data from various sources to make this prediction. The bigger the risk the higher the interest rates and the risk of a loan default. 
-Alhtough this is not a new subject, the evolution of machine learning algorithms have helped to spread the utilization of them, as we can see in Flint[^fn1] and Chang, Dae-oong Kim and Kondo[^fn2] work. The former tried to address the risk associated with student loans back in 1997, and the latter expressed its methods to achieve good results in a peer-to-peer lending company. 
+Alhtough this is not a new subject, the evolution of machine learning algorithms have helped to spread the utilization of them, as we can see in Flint's work named *"Predicting Student Loan Defaults"* and Chang, Dae-oong Kim and Kondo work named *"Predicting Default Risk of Lending Club Loans"* . The former tried to address the risk associated with student loans back in 1997, and the latter expressed its methods to achieve good results in a peer-to-peer lending company. 
 
-[^fn1]: Thomas A. Flint, The Journal of Higher Education. Vol. 68, No. 3 (May - Jun., 1997), pp. 322-354
-[^fn2]: Shunpo Chang, Dae-oong, Kondo. Predicting Default Risk of Lending Club Loans. Stanford University.
+**References :**
+Thomas A. Flint, The Journal of Higher Education. Vol. 68, No. 3 (May - Jun., 1997), pp. 322-354
+<BR>Shunpo Chang, Dae-oong, Kondo. Predicting Default Risk of Lending Club Loans. Stanford University.
 
 ### Problem Statement
 
@@ -24,37 +25,40 @@ Home Credit is trying to minimize its loss due to loan defaults in a way that th
 
 The data provided by Kaggle is comprised of 8 CSV files, the description presented below was extracted from [kaggle documentation](https://www.kaggle.com/c/home-credit-default-risk/data).
 
-**1. application_{train|test}.csv**
+**1. application_{train|test}.csv**:
 This is the main table, broken into two files for Train (with TARGET) and Test (without TARGET).
 Static data for all applications. One row represents one loan in our data sample.
 
-**2. bureau.csv**
+**2. bureau.csv**:
 All client's previous credits provided by other financial institutions that were reported to Credit Bureau (for clients who have a loan in our sample).
 For every loan in our sample, there are as many rows as number of credits the client had in Credit Bureau before the application date.
 
-**3. bureau_balance.csv**
+**3. bureau_balance.csv**:
 Monthly balances of previous credits in Credit Bureau.
 This table has one row for each month of history of every previous credit reported to Credit Bureau – i.e the table has (#loans in sample * # of relative previous credits * # of months where we have some history observable for the previous credits) rows.
 
-**4. POS_CASH_balance.csv**
+**4. POS_CASH_balance.csv**:
 Monthly balance snapshots of previous POS (point of sales) and cash loans that the applicant had with Home Credit.
 This table has one row for each month of history of every previous credit in Home Credit (consumer credit and cash loans) related to loans in our sample – i.e. the table has (#loans in sample * # of relative previous credits * # of months in which we have some history observable for the previous credits) rows.
 
-**5. credit_card_balance.csv**
+**5. credit_card_balance.csv**:
 Monthly balance snapshots of previous credit cards that the applicant has with Home Credit.
 This table has one row for each month of history of every previous credit in Home Credit (consumer credit and cash loans) related to loans in our sample – i.e. the table has (#loans in sample * # of relative previous credit cards * # of months where we have some history observable for the previous credit card) rows.
 
-**6. previous_application.csv**
+**6. previous_application.csv**:
 All previous applications for Home Credit loans of clients who have loans in our sample.
 There is one row for each previous application related to loans in our data sample.
 
-**7. installments_payments.csv**
+**7. installments_payments.csv**:
 Repayment history for the previously disbursed credits in Home Credit related to the loans in our sample.
 There is a) one row for every payment that was made plus b) one row each for missed payment.
 One row is equivalent to one payment of one installment OR one installment corresponding to one payment of one previous Home Credit credit related to loans in our sample.
 
-**8. HomeCredit_columns_description.csv**
+**8. HomeCredit_columns_description.csv**:
 This file contains descriptions for the columns in the various data files.
+
+Below is the diagram of the relation between each one of the files:
+![Project Design flow](home_credit/images/home_credit_data.png)
 
 ### Solution Statement
 
