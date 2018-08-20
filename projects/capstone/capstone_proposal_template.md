@@ -80,5 +80,5 @@ The approach to solve the classification problem will follow the list of activit
 5. Run classifier on test data and collect final results.
 
 Below is a diagram of the overall architecture:
-![Project Design flow](images/project_design.png)
+![Project Design flow](home_credit/images/project_design.png)
 
