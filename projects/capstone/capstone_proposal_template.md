@@ -4,7 +4,7 @@ Braian O. Dias
 August, 2018
 
 ## Proposal
-Financial data is growing exponentially, helping institutions to improve their relationships with customers, offering tailor made products and reducing the overall risk of a credit operation. Kaggle offers a great opportunity to make good use of machine learning techniques to address a real world problem in a financial institution which borrows money to people that are currently underserved with loans. The main goal of the Kaggle challenge named [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk) sponsored by Home Credit Group, is to make use of a variety of alternative data to predict their clients' repayment abilities.
+Financial data is growing exponentially, helping institutions to improve their relationships with customers, offering tailor made products and reducing the overall risk of a credit operation. Kaggle offers a great opportunity to make good use of machine learning techniques to address a real world problem in a financial institution which borrows money to people that are currently underserved with loans. The main goal of the Kaggle challenge named **Home Credit Default Risk** (https://www.kaggle.com/c/home-credit-default-risk) sponsored by Home Credit Group, is to make use of a variety of alternative data to predict their clients' repayment abilities.
 
 This project will try to answer the main challenge question, *"Can you predict how capable each applicant is of repaying a loan?"* with a decent accuracy, taking into account the results of others challege's applicants. All the data needed to develop the solution is available on Kaggle. As a current Fintech employee, which offers banking solutions to more than 700.000 customers in Brazil, it's a great opportunity to merge the Machine Learning techniques learned in the Nanodegree and apply it in my field of work.
 
@@ -84,7 +84,7 @@ The selected classification algorithms are Random Forests, Logistic Regression a
 
 ### Benchmark Model
 
-The chosen benchmark model was a previous work which deals with a similar problem in a Kaggle challenge, *"Predicting borrowers’ chance of defaulting on credit loans."*, by Liang. The performance metric used was the same required by the Home Credit Default Risk challenge, the AUC score. Details on the score funtion will be presented on the next section. The full document can be seen here : http://cs229.stanford.edu/proj2011/JunjieLiang-PredictingBorrowersChanceOfDefaultingOnCreditLoans.pdf
+The chosen benchmark model was a previous work which deals with a similar problem in a Kaggle challenge, *"Predicting borrowers’ chance of defaulting on credit loans."*, by Liang. The performance metric used was the same required by the Home Credit Default Risk challenge, the AUC score. Details on the score funtion will be presented on the next section. Liang got an AUC score of 0.867262 using Random Forests. The full document can be seen here : http://cs229.stanford.edu/proj2011/JunjieLiang-PredictingBorrowersChanceOfDefaultingOnCreditLoans.pdf
 
 
 ### Evaluation Metrics
