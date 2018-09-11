@@ -16,10 +16,10 @@ Home Credit is trying to minimize its loss due to loan defaults in a way that th
 The final solution will be built as follows :
 1. Load files provided by Kaggle;
 2. Perform an Exploratory Analysis of the dataset;
-3. Transform data to a suitable format to the machine learning algorithms
-4. Train a baseline model, and a state of the art model
-5. Evaluate model results and adjust parameters
-6. Predict results on the test data and submit it to Kaggle to obtain the final score
+3. Transform data to a suitable format to the machine learning algorithms;
+4. Train a baseline model, and a state of the art model; 
+5. Evaluate model results and adjust parameters;
+6. Predict results on the test data and submit it to Kaggle to obtain the final score.
 
 The final score will be obtained after submitting test predictions to Kaggle.
 
@@ -102,6 +102,18 @@ In this section, you will need to provide some form of visualization that summar
 - _If a plot is provided, are the axes, title, and datum clearly defined?_
 
 ### Algorithms and Techniques
+To answer the main challenge question, *"Can you predict how capable each applicant is of repaying a loan?"*, a Supervised Machine Learning model will be trained using the data described in the previous section. The trained classifier then will outputs, given some input data, if the customer is able to repay the loan.
+
+The selected classification algorithms are Random Forests and XGBoost. The former will be used as baseline, because is a classical Ensemble Algorithm, the latter is a recent approach widely used in Kaggle competitions. Each model will be assessed using validation data and the one with the best AUC will be selected for the next step.
+
+Random forests is a classical ensemble algorithm invented by Breiman and Cutler. It was chosen as a baseline because it's a simple method - and by its ensemble nature does not require much feature engineering - with a decent performance, and runs efficiently on large tabular, structured data. Although it works well with predefined parameters, it doesn't handle missing data. So, in order to train the model, all  missing values must be treated either removing the feature or imputing data.
+
+XGBoost is a scalable machine learning system for tree boosting, which is used widely by data scientists to achieve state-of-the-art results on many machine learning challenges. Both selected methods are classified as Tree Ensemble Models, whose the final prediction for a given example is the sum of predictions from each tree. Below is a figure that shows in a simple way how an Tree Ensemble Model works.
+
+![Tree Ensemble Models](home_credit/images/tree_model.png)
+
+In many real-world problems, it is quite common for the input data to be sparse. There are multiple possible causes for sparsity: 1) presence of missing values in the data; 2) frequent zero entries in the statistics; and, 3) artifacts of feature engineering such as one-hot encoding. XGBoost has a Sparse Aware implementation with automatic handling of missing data values, so there's no need to preprocess these values. Although some data was imputed in order to train Random Forest, the original dataset with missing values will be used on XGBoost to prevent increasing error and bias as consequence of this data imputation.
+
 In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
 - _Are the algorithms you will use, including any default variables/parameters in the project clearly defined?_
 - _Are the techniques to be used thoroughly discussed and justified?_
