@@ -1,6 +1,6 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Project
-Braian O. Dias
+Braian O. Dias,
 September 12th, 2018
 
 ## I. Definition
@@ -14,14 +14,14 @@ This project will try to answer the main challenge question, *"Can you predict h
 Home Credit is trying to minimize its loss due to loan defaults in a way that they accurately approve credit to customers that are likely to pay their debt. With supervised learning, we are able to build a model to predict their clients' repayment abilities, based on historical data provided by Home Credit through Kaggle.
 
 The final solution will be built as follows :
-1. Load the files provided by Kaggle;
+1. Load files provided by Kaggle;
 2. Perform an Exploratory Analysis of the dataset;
 3. Transform data to a suitable format to the machine learning algorithms
 4. Train a baseline model, and a state of the art model
-5. Evaluate the model results and adjust parameters
-6. Predict the results on the test data and submit it to Kaggle to obtain the final score
+5. Evaluate model results and adjust parameters
+6. Predict results on the test data and submit it to Kaggle to obtain the final score
 
-The final score will be obtained after submitting the test predictions to Kaggle.
+The final score will be obtained after submitting test predictions to Kaggle.
 
 ### Metrics DONE
 The evaluation of the model will be done using **area under the ROC curve** (AUC) between the predicted probability and the observed target.
@@ -38,7 +38,7 @@ Below is a summary of all 8 files available : 1 main file for training (with tar
 
 The training data has 307511 observations (each one a separate loan) and 122 features (variables) including the TARGET (the label we want to predict). The test data folows the same structure, but it has 48744 observations and lacks the TARGET column.
 
-We can see the first 5 observations of the main training data below :
+We can see the first 10 observations of the main training data below :
 
 ![training data overview](home_credit/images/app_train_head.png)
 
@@ -61,7 +61,7 @@ Also, there are features that represent count of days : ['DAYS_BIRTH', 'DAYS_EMP
 ![Days of employment histogram](home_credit/images/DAYS_EMPLOYMENT_HIST.png)
 
 A total of **55374 days of employment** have issues. For now, nothing will be done about this anomaly, but it will be treated in the section *Data Preprocessing* later on this document.
-Now, let's focus on the remaining numerical values, the **float features**. As previously, some basic statistics about the data was generated usin the *describe()* method :
+Now, let's focus on the remaining numerical values, the **float features**. As seen previously, some basic statistics about the data was generated using the *describe()* method :
 
 ![float features statistics](home_credit/images/float_features_stats.png)
 
