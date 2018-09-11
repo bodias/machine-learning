@@ -1,39 +1,101 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Project
-Joe Udacity  
-December 31st, 2050
+Braian O. Dias
+September 12th, 2018
 
 ## I. Definition
-_(approx. 1-2 pages)_
 
-### Project Overview
-In this section, look to provide a high-level overview of the project in layman’s terms. Questions to ask yourself when writing this section:
-- _Has an overview of the project been provided, such as the problem domain, project origin, and related datasets or input data?_
-- _Has enough background information been given so that an uninformed reader would understand the problem domain and following problem statement?_
+### Project Overview DONE
+Financial data is growing exponentially, helping institutions to improve their relationships with customers, offering tailor made products and reducing the overall risk of a credit operation. Kaggle offers a great opportunity to make good use of machine learning techniques to address a real world problem in a financial institution which borrows money to people that are currently underserved with loans. The main goal of the Kaggle challenge named **Home Credit Default Risk** (https://www.kaggle.com/c/home-credit-default-risk) sponsored by Home Credit Group, is to make use of a variety of alternative data to predict their clients' repayment abilities.
 
-### Problem Statement
-In this section, you will want to clearly define the problem that you are trying to solve, including the strategy (outline of tasks) you will use to achieve the desired solution. You should also thoroughly discuss what the intended solution will be for this problem. Questions to ask yourself when writing this section:
-- _Is the problem statement clearly defined? Will the reader understand what you are expecting to solve?_
-- _Have you thoroughly discussed how you will attempt to solve the problem?_
-- _Is an anticipated solution clearly defined? Will the reader understand what results you are looking for?_
+This project will try to answer the main challenge question, *"Can you predict how capable each applicant is of repaying a loan?"* with a decent accuracy, taking into account the results of others challege's applicants. All the data needed to develop the solution is available on Kaggle in the form of .csv files that will be shown in detail later. As a current Fintech employee, which offers banking solutions to more than 700.000 customers in Brazil, it's a great opportunity to merge the Machine Learning techniques learned in the Nanodegree and apply it in my field of work.
 
-### Metrics
-In this section, you will need to clearly define the metrics or calculations you will use to measure performance of a model or result in your project. These calculations and metrics should be justified based on the characteristics of the problem and problem domain. Questions to ask yourself when writing this section:
-- _Are the metrics you’ve chosen to measure the performance of your models clearly discussed and defined?_
-- _Have you provided reasonable justification for the metrics chosen based on the problem and solution?_
+### Problem Statement DONE
+Home Credit is trying to minimize its loss due to loan defaults in a way that they accurately approve credit to customers that are likely to pay their debt. With supervised learning, we are able to build a model to predict their clients' repayment abilities, based on historical data provided by Home Credit through Kaggle.
 
+The final solution will be built as follows :
+1. Load the files provided by Kaggle;
+2. Perform an Exploratory Analysis of the dataset;
+3. Transform data to a suitable format to the machine learning algorithms
+4. Train a baseline model, and a state of the art model
+5. Evaluate the model results and adjust parameters
+6. Predict the results on the test data and submit it to Kaggle to obtain the final score
+
+The final score will be obtained after submitting the test predictions to Kaggle.
+
+### Metrics DONE
+The evaluation of the model will be done using **area under the ROC curve** (AUC) between the predicted probability and the observed target.
+According to Google (https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc), "One way of interpreting AUC is as the probability that the model ranks a random positive example more highly than a random negative example", which means that it is a good choice for problems where the target variable is unbalanced. 
+AUC ranges in value from 0 to 1. A model whose predictions are 100% wrong has an AUC of 0.0; one whose predictions are 100% correct has an AUC of 1.0. This is the metric defined by the Kaggle challenge to evaluate the best model.
 
 ## II. Analysis
-_(approx. 2-4 pages)_
 
-### Data Exploration
-In this section, you will be expected to analyze the data you are using for the problem. This data can either be in the form of a dataset (or datasets), input data (or input files), or even an environment. The type of data should be thoroughly described and, if possible, have basic statistics and information presented (such as discussion of input features or defining characteristics about the input or environment). Any abnormalities or interesting qualities about the data that may need to be addressed have been identified (such as features that need to be transformed or the possibility of outliers). Questions to ask yourself when writing this section:
-- _If a dataset is present for this problem, have you thoroughly discussed certain features about the dataset? Has a data sample been provided to the reader?_
-- _If a dataset is present for this problem, are statistics about the dataset calculated and reported? Have any relevant results from this calculation been discussed?_
-- _If a dataset is **not** present for this problem, has discussion been made about the input space or input data for your problem?_
-- _Are there any abnormalities or characteristics about the input space or dataset that need to be addressed? (categorical variables, missing values, outliers, etc.)_
+### Data Exploration DONE
+The data provided by Kaggle is comprised of 8 CSV files, with a main train/test file with reference to all the other files through the SK_xxx columns. The file *"HomeCredit_columns_description.csv"* contains information about each column in each file.
+Below is a summary of all 8 files available : 1 main file for training (with target) 1 main file for testing (without the target), and 6 other files containing additional information about each loan.
+
+![File stats](home_credit/images/file_stats.png)
+
+The training data has 307511 observations (each one a separate loan) and 122 features (variables) including the TARGET (the label we want to predict). The test data folows the same structure, but it has 48744 observations and lacks the TARGET column.
+
+We can see the first 5 observations of the main training data below :
+
+![training data overview](home_credit/images/app_train_head.png)
+
+There are many features in the dataset, so in order to analyse them using the proper way the dataset will be splitted in numerical and non-numerical values. Then numerical features will be splitted in integer and float.
+
+* There are 16 NON-numerical features in the main dataset.
+* There are 104 numerical features in the main dataset.
+    * 39 are Int64 features
+    * 65 are Float64 features
+
+#### Numerical features
+First, we will compute some basic statistics to determine how values are distributed and to try to infer the purpose of each one, and also to detect anomalies.
+Below are the statistics of the **integer features**, calculated through the *describe()* method of the pandas dataframe : 
+
+![integer features statistics](home_credit/images/int_features_stats.png)
+
+It can be seen that most of the integer features are in fact *binary features* already coded in [0,1], then those features will be classified as *int_binary_features* for the sake of feature transformation that will be performed later.
+Also, there are features that represent count of days : ['DAYS_BIRTH', 'DAYS_EMPLOYED', 'DAYS_ID_PUBLISH']. One of them, ***DAYS_EMPLOYED***, which stores the count of days the applicant is employed, has a maximum value of 365243, which is more 1000 years. Let's investigate further and see how many observations have this pattern using a histogram.
+
+![Days of employment histogram](home_credit/images/DAYS_EMPLOYMENT_HIST.png)
+
+A total of **55374 days of employment** have issues. For now, nothing will be done about this anomaly, but it will be treated in the section *Data Preprocessing* later on this document.
+Now, let's focus on the remaining numerical values, the **float features**. As previously, some basic statistics about the data was generated usin the *describe()* method :
+
+![float features statistics](home_credit/images/float_features_stats.png)
+
+Now we start to see some differences between the count of each feature and the total count of observations in the dataset, which means there is **missing data** in these features. There is a total of 61 out of 65 float features with missing data, and the first 10 of them are presented below with the percentage of null values over the whole dataset.
+
+![float features - null values](home_credit/images/float_features_null.png)
+
+The table above shows that these top 10 features by missing count have about 68% of missing values over the whole dataset. This is a huge number, and the consequences of this characteristic of the data will be discussed later on the *Data Preprocessing* section.
+
+#### Non-numerical features
+The remaining class of features holds discrete data coded as text. Again python can output basic statistics of this data type, but instead of min, max, quantiles, mean and standard deviation, the method *describe()* give us an overview of the frequency and unique values of the discrete attribute. Below is the output of the pandas describe() method over the discrete data : 
+
+![non-numerical features statistics](home_credit/images/non_numerical_features_stats.png)
+
+We can see from the data above that the features EMERGENCYSTATE_MODE has only two possible values (yes/no). However, this features is going to be treated as it has more than 2 categories, once we're going to introduce a new category to represent the NaN values. Other 3 features, ['NAME_CONTRACT_TYPE','FLAG_OWN_CAR','FLAG_OWN_REALTY'], have binary values, then they will be treated as *text_binary_features* in the data preprocessing phase .
+It's also possible to note that there are **missing** values for some features, to understand this issue better, the following table presents the percentage of null values over the whole dataset.
+
+![non-numerical features - null values](home_credit/images/non_numerical_features_null.png)
+
+6 out of 16 discrete features has missing values, and 3 of them have more than half of the values missing. The strategies for data imputation will be discussed on the *Data Preprocessing* section.
+
+To summarize, the whole main training dataset was analyzed accordingly to each feature data type. This process also separated the features into continuous (int and float features) and discrete (int/text binary features, discrete with many levels) features. With this distinction it will be possible to perform *label encoding* over discrete features in order to have them in a suitable format to train a machine learning model.
 
 ### Exploratory Visualization
+
+Looking at the training data, it's possible to note that the target variable is not balanced:
+
+* Number of training instances with TARGET 0 : 282686
+* Number of training instances with TARGET 1 : 24825
+
+![Project Design flow](home_credit/images/target_var_dist.png)
+
+
+
 In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
 - _Have you visualized a relevant characteristic or feature about the dataset or input data?_
 - _Is the visualization thoroughly analyzed and discussed?_
