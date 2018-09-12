@@ -31,17 +31,17 @@ AUC ranges in value from 0 to 1. A model whose predictions are 100% wrong has an
 
 ### Data Exploration 
 The data provided by Kaggle is comprised of 8 CSV files, with a main train/test file with reference to all the other files through the SK_xxx columns. The file *"HomeCredit_columns_description.csv"* contains information about each column in each file.
-Below is a summary of all 8 files available : 1 main file for training (with target) 1 main file for testing (without the target), and 6 other files containing additional information about each loan.
+Below is a summary of all 8 available files : 1 main file for training (with target) 1 main file for testing (without the target), and 6 other files containing additional information about each loan.
 
 ![File stats](home_credit/images/file_stats.png)
 
-The training data has 307511 observations (each one a separate loan) and 122 features (variables) including the TARGET (the label we want to predict). The test data folows the same structure, but it has 48744 observations and lacks the TARGET column.
+The training data has 307511 observations (each one a separate loan) and 121 features (variables) plus the TARGET (the label we want to predict). The test data folows the same structure, but it has 48744 observations and lacks the TARGET column.
 
 We can see the first 10 observations of the main training data below :
 
 ![training data overview](home_credit/images/app_train_head.png)
 
-There are many features in the dataset, so in order to analyse them using the proper way the dataset will be splitted in numerical and non-numerical values. Then numerical features will be splitted in integer and float.
+There are many features in the dataset, so in order to analyse them using the proper way the dataset will be splitted in numerical and non-numerical values. Then numerical features will be splitted in integer and float values.
 
 * There are 16 NON-numerical features in the main dataset.
 * There are 104 numerical features in the main dataset.
@@ -49,13 +49,13 @@ There are many features in the dataset, so in order to analyse them using the pr
     * 65 are Float64 features
 
 #### Numerical features
-First, we will compute some basic statistics to determine how values are distributed and to try to infer the purpose of each one, and also to detect anomalies.
+First, we will compute some basic statistics to determine how values are distributed, to understand the meaning of each one and also to detect anomalies.
 Below are the statistics of the **integer features**, calculated through the *describe()* method of the pandas dataframe : 
 
 ![integer features statistics](home_credit/images/int_features_stats.png)
 
 It can be seen that most of the integer features are in fact *binary features* already coded in [0,1], then those features will be classified as *int_binary_features* for the sake of feature transformation that will be performed later.
-Also, there are features that represent count of days : ['DAYS_BIRTH', 'DAYS_EMPLOYED', 'DAYS_ID_PUBLISH']. One of them, ***DAYS_EMPLOYED***, which stores the count of days the applicant is employed, has a maximum value of 365243, which is more 1000 years. Let's investigate further and see how many observations have this pattern using a histogram.
+Also, there are features that represent count of days : ['DAYS_BIRTH', 'DAYS_EMPLOYED', 'DAYS_ID_PUBLISH']. One of them, ***DAYS_EMPLOYED***, which stores the count of days the applicant is employed, has a maximum value of 365243, which is more 1000 years. Let's investigate further and see how many observations this pattern has using a histogram.
 
 ![Days of employment histogram](home_credit/images/DAYS_EMPLOYMENT_HIST.png)
 
@@ -76,7 +76,7 @@ The remaining class of features holds discrete data coded as text. Again python 
 ![non-numerical features statistics](home_credit/images/non_numerical_features_stats.png)
 
 We can see from the data above that the features EMERGENCYSTATE_MODE has only two possible values (yes/no). However, this features is going to be treated as it has more than 2 categories, once we're going to introduce a new category to represent the NaN values. Other 3 features, ['NAME_CONTRACT_TYPE','FLAG_OWN_CAR','FLAG_OWN_REALTY'], have binary values, then they will be treated as *text_binary_features* in the data preprocessing phase .
-It's also possible to note that there are **missing** values for some features, to understand this issue better, the following table presents the percentage of null values over the whole dataset.
+It's also possible to note that there are **missing** values for some features, to understand this issue better, the following table presents the percentage of null discret values over the whole dataset.
 
 ![non-numerical features - null values](home_credit/images/non_numerical_features_null.png)
 
@@ -94,7 +94,7 @@ The value we want to predict is either a 0, for the loan was repaid on time, or 
 
 Looking at the chart above, it's possible to see that the target variable is not balanced in the training data. There are more loans that were repaid on time than loans that were not repaid.
 
-There is a high number of features (121) which makes impossible to plot a scatter_matrix to analyse trends over paired data. 
+Another interesting characteristic of the data is its high number of features (121) which makes impossible to plot a scatter_matrix to analyse trends over paired data. 
 To focus on the more relevant features, let's see how each feature is correlated with the target using the Pearson Correlation Coefficient through corr() function. All scores below are absolute values, this way we obtain the top 10 features highly correlated with the target variable, idependently if it's a positive or a negative correlation.
 
 ![Top features correlated to TARGET](home_credit/images/top_corr.png)
@@ -111,9 +111,9 @@ To answer the main challenge question, *"Can you predict how capable each applic
 
 The selected classification algorithms are Random Forest and XGBoost. The former will be used as baseline, because is a classical Ensemble Algorithm, the latter is a recent approach widely used in Kaggle competitions. Each model will be assessed using validation data and the one with the best AUC will be selected for the next step.
 
-Random Forest is a classical ensemble algorithm invented by Breiman and Cutler. It was chosen as a baseline because it's a simple method - and by its ensemble nature does not require much feature engineering - with a decent performance, and runs efficiently on large tabular, structured data. Although it works well with predefined parameters, it doesn't handle missing data. So, in order to train the model, all  missing values must be treated either removing the feature or imputing data.
+**Random Forest** is a classical ensemble algorithm invented by Breiman and Cutler. It was chosen as a baseline because it's a simple method - and by its ensemble nature does not require much feature engineering - with a decent performance, and runs efficiently on large tabular, structured data. Although it works well with predefined parameters, it doesn't handle missing data. So, in order to train the model, all  missing values must be treated either removing the feature or imputing data.
 
-XGBoost is a scalable machine learning system for tree boosting, which is used widely by data scientists to achieve state of the art results on many machine learning challenges. Both selected methods are classified as Tree Ensemble Models, whose the final prediction for a given example is the sum of predictions from each tree. Below is a figure that shows in a simple way how a Tree Ensemble Model works.
+**XGBoost** is a scalable machine learning system for tree boosting, which is used widely by data scientists to achieve state of the art results on many machine learning challenges. Both selected methods are classified as Tree Ensemble Models, whose the final prediction for a given example is the sum of predictions from each tree. Below is a figure that shows in a simple way how a Tree Ensemble Model works.
 
 ![Tree Ensemble Models](home_credit/images/tree_model.png)
 
@@ -121,35 +121,34 @@ In many real-world problems, it is quite common for the input data to be sparse.
 
 
 ### Benchmark
-The AUC score for a classical Tree Ensemble method, Random Forest, will be used as a baseline. The work *"Predicting borrowers’ chance of defaulting on credit loans."*, by Liang has a similar underlying problem, predict default risk, and the final AUC score was 0.867262 using Random Forest. The full document can be seen here : http://cs229.stanford.edu/proj2011/JunjieLiang-PredictingBorrowersChanceOfDefaultingOnCreditLoans.pdf. Although it's not possible to compare both scores directly, it serves as a justification of the chosen baseline model.
+The AUC score for a classical Tree Ensemble method, Random Forest, will be used as a baseline. The work *"Predicting borrowers’ chance of defaulting on credit loans."*, by Liang has a similar underlying problem, predict default risk, and the final AUC score was 0.867262 using Random Forest. The full document can be seen here : http://cs229.stanford.edu/proj2011/JunjieLiang-PredictingBorrowersChanceOfDefaultingOnCreditLoans.pdf. Although it's not possible to compare both scores directly, because the dataset is completely differente, it serves as a justification of the chosen baseline model.
 
 The final classifier will use a recent tree boosting algorithm, presented by Tianqi Chen and Carlos Guestrin in 2016, called XGBoost. Once this classifier has many improvements over the classical Random Forest, it's expected that XGBoost performs better. 
 
 
 ## III. Methodology
-_(approx. 3-5 pages)_
 
 ### Data Preprocessing
 As already discussed in other sections of this document, there are some data preprocessing tasks that need to be done in order to transform raw data to a suitable format for machine learning. Also there are some issues like outliers and missing data that need to be addressed. In the Data Exploration section we classified each feature according to the type of values it stores. Now, we're going o focus on transforming Non-numerical features into numbers.
 
 #### Label encoding for discrete features
-For discrete features with more than 2 unique values, where going to perform one-hot encoding, and for binary features, we're going to perform label encoding. For the latter, there is one feature vector *text_binary_features*, which is going to be used to select this type of attribute. We then use the *LabelEncoder()* sklearn class to encode the binary features in [0,1]. This transformation also need to be applied in the test dataset to make sure the input is the same on training and predition.
+For discrete features with more than 2 unique values, where going to perform one-hot encoding, and for binary features we're going to perform label encoding. For the latter, there is one feature vector *text_binary_features*, which is going to be used to select this type of attribute. We then use the *LabelEncoder()* sklearn class to encode the binary features in [0,1]. This transformation also need to be applied in the test dataset to make sure the input is the same on training and predition.
 
-Binary features are complete on the dataset (there's any NaN value), however, the same doesn't occur in the rest of non-numerical features. As shown in the Data Exploration, there are 6 features with missing values. To adjust that, instead of imputing the most frequent term where the value is null, we're going create a new unique value called 'NOT_INF' (short for 'not informed'). In other words, the lack of information will be treated as a information. After assigning 'NOT_INF' to observations with missing data we are ready to perform one-hot encoding.
+Binary features are complete on the dataset (there is no NaN values), however, the same doesn't occur in the rest of non-numerical features. As shown in the Data Exploration, there are 6 features with missing values. To adjust that, instead of imputing the most frequent term where the value is null, we're going create a new unique value called 'NOT_INF' (short for 'not informed'). In other words, the lack of information will be treated as information. After assigning 'NOT_INF' to observations with missing data we are ready to perform one-hot encoding.
 
 One-hot encoding can be done easily by the pandas method *pd.get_dummies()* and need to be done for both train and test set. There need to be the same features (columns) in both the training and testing data. When performed One-hot encoding, it has created columns in the training data with categories not represented in the testing data. To adjust the dataset we use the pandas function  *align*, which drops columns of the train dataframe that doesn't exist in test dataframe.
 
-After label encoding we changed our number of features of 121 to 245, but they are all numerical now.
+After label encoding we increased our number of features from 121 to 245, but they are all numerical now.
 
 #### Outliers
 In the *Data Exploration* section we've seen an outlier in *DAYS_EMPLOYED* column. First, a new boolean column indicating whether or not the value was anomalous will be created. It will be called "DAYS_EMPLOYED_OUTL", and will store 1 in case it's an outlier and 0 if it's not. Then, those outliers will be set to NaN using numpy *np.nan*. Below we can see two histograms showing the distribution of the DAYS_EMPLOYED values before and after removing the outliers.
 
 ![DAYS_EMPLOYED outlier](home_credit/images/outlier_removal.png)
 
-The resulting distribution shape seems more reasonable now, and we also added a new feature to track if the observation was originally anomalous. Note that we must run the same process for both train and test dataset. In the next section the NaN value introduced will be treated together with the other features containing NaN values.
+The resulting distribution shape seems more reasonable now, and we also added a new feature to track if the observation was originally anomalous. Note that we must run the same process for both train and test dataset. In the next section the NaN value introduced by this data cleansing will be treated together with the other features containing NaN values.
 
 #### Dealing with missing data
-After we addressed the missing data in discrete features, we need to do the same with numerical features with missing data. Despite XGBoost automatic handles missing data, as described in its documentation, we need to impute data in order to train our baseline classifier, Random Forest. To be able to train XGBoost without data imputation, we're goint to create a copy of the train and test dataset to perform the next tansformations. 
+After we addressed the missing data in discrete features, we need to do the same with numerical features. Despite XGBoost automatic handles missing data, as described in its documentation, we need to impute data in order to train our baseline classifier, Random Forest. To be able to train XGBoost without data imputation, we're goint to create a copy of the train and test dataset to perform the next tansformations. 
 There are 61 numerical features with at least one missing value in the dataset. The chart below displays the percentage of missing data for each feature.
 
 ![missing values - numerical](home_credit/images/numerical_features_nullplot.png)
@@ -158,11 +157,10 @@ We can clearly see that the majority of columns with more than 49% of missing va
 
 
 ### Implementation
-
 The implementation consists of training and evaluate two classification algorithms and report their AUC score:
-    1. Train a baseline model - Random Forest - and analyse its predition results over a validation set;
-    2. Train a state of the art model - XGBoost - and analyse its predition results over a validation set.
-    3. Train a state of the art model with imputed data - XGBoost - and analyse its predition results over a validation set.
+1. Train a baseline model - Random Forest - and analyse its predition results over a validation set;
+2. Train a state of the art model - XGBoost - and analyse its predition results over a validation set.
+3. Train a state of the art model with imputed data - XGBoost - and analyse its predition results over a validation set.
 
 #### Random Forest
 The baseline model, Random Forest, will be trained with the **preprocessed train data, without NaN values**. During this stage the sklearn *RandomForestClassifier()* will be used with its default parameters, using cross-validation with 10 folds. The scoring function is 'roc_auc'.
@@ -179,15 +177,15 @@ To check if the data imputation process really degrade the final score, let's al
 
 ![XGBoost with data imputation](home_credit/images/xgboost_imputed_score.png)
 
+# FALTA
 ### Refinement
-
 The first results with default parameters were not bad, and we can clearly see that XGBoost is more robust than Random Forest. However, we can make use of a well known technique for parameter optimization called Grid-search. Grid-searching is the process of scanning the data to configure optimal parameters for a given model. Depending on the type of model utilized, certain parameters are necessary. It is important to note that Grid-searching can be extremely computationally expensive and may take your machine quite a long time to run. Grid-Search will build a model on each parameter combination possible. It iterates through every parameter combination and stores a model for each combination.
 
 Due to the lack of computational resources, the number of parameters and range of each one will be limited. The table below shows each parameter that will be tested and their possible values. First, let's setup the parameters for Random Forest:
 
 |  Parameter            | Possible Values |
 | :-------------------: | :---------------: |
-| **Max_depth**         |    [10,50]        |      
+| **max_depth**         |    [10,50]        |      
 | **min_samples_leaf**  |    [1,4]          |
 | **min_samples_split** |    [2,10]         |  
 | **n_estimators**      |    [200,1000]     |       
