@@ -23,7 +23,7 @@ The final solution will be built as follows :
 
 The final score will be obtained after submitting test predictions to Kaggle.
 
-### Metrics DONE
+### Metrics
 The evaluation of the model will be done using **area under the ROC curve** (AUC) between the predicted probability and the observed target.
 According to Google (https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc), "One way of interpreting AUC is as the probability that the model ranks a random positive example more highly than a random negative example", which means that it is a good choice for problems where the target variable is unbalanced. 
 AUC ranges in value from 0 to 1. A model whose predictions are 100% wrong has an AUC of 0.0; one whose predictions are 100% correct has an AUC of 1.0. This is the metric defined by the Kaggle challenge to evaluate the best model.
@@ -94,10 +94,10 @@ The value we want to predict is either a 0, for the loan was repaid on time, or 
 * Number of training instances with TARGET 0 : 282686
 * Number of training instances with TARGET 1 : 24825
 
-Looking at the above below, it's possible to see that the target variable is not balanced in the training data. There are more loans that were repaid on time than loans that were not repaid.
+Looking at the chart above, it's possible to see that the target variable is not balanced in the training data. There are more loans that were repaid on time than loans that were not repaid.
 
 There is a high number of features (121) which makes impossible to plot a scatter_matrix to analyse trends over paired data. 
-To focus on the more relevant features, let's see how each feature is correlated with the target using the Pearson Correlation Coefficient through corr() function. All scores below are absolute values, in order to get the top 10 features highly correlated with the target variable, idependently if it's a positive or a negative correlation.
+To focus on the more relevant features, let's see how each feature is correlated with the target using the Pearson Correlation Coefficient through corr() function. All scores below are absolute values, this way we obtain the top 10 features highly correlated with the target variable, idependently if it's a positive or a negative correlation.
 
 ![Top features correlated to TARGET](home_credit/images/top_corr.png)
 
@@ -111,11 +111,11 @@ We can se above that there are some binary and continous features. The feature "
 ### Algorithms and Techniques
 To answer the main challenge question, *"Can you predict how capable each applicant is of repaying a loan?"*, a Supervised Machine Learning model will be trained using the data described in the previous section. The trained classifier then will outputs, given some input data, if the customer is able to repay the loan.
 
-The selected classification algorithms are Random Forests and XGBoost. The former will be used as baseline, because is a classical Ensemble Algorithm, the latter is a recent approach widely used in Kaggle competitions. Each model will be assessed using validation data and the one with the best AUC will be selected for the next step.
+The selected classification algorithms are Random Forest and XGBoost. The former will be used as baseline, because is a classical Ensemble Algorithm, the latter is a recent approach widely used in Kaggle competitions. Each model will be assessed using validation data and the one with the best AUC will be selected for the next step.
 
-Random forests is a classical ensemble algorithm invented by Breiman and Cutler. It was chosen as a baseline because it's a simple method - and by its ensemble nature does not require much feature engineering - with a decent performance, and runs efficiently on large tabular, structured data. Although it works well with predefined parameters, it doesn't handle missing data. So, in order to train the model, all  missing values must be treated either removing the feature or imputing data.
+Random Forest is a classical ensemble algorithm invented by Breiman and Cutler. It was chosen as a baseline because it's a simple method - and by its ensemble nature does not require much feature engineering - with a decent performance, and runs efficiently on large tabular, structured data. Although it works well with predefined parameters, it doesn't handle missing data. So, in order to train the model, all  missing values must be treated either removing the feature or imputing data.
 
-XGBoost is a scalable machine learning system for tree boosting, which is used widely by data scientists to achieve state-of-the-art results on many machine learning challenges. Both selected methods are classified as Tree Ensemble Models, whose the final prediction for a given example is the sum of predictions from each tree. Below is a figure that shows in a simple way how an Tree Ensemble Model works.
+XGBoost is a scalable machine learning system for tree boosting, which is used widely by data scientists to achieve state-of-the-art results on many machine learning challenges. Both selected methods are classified as Tree Ensemble Models, whose the final prediction for a given example is the sum of predictions from each tree. Below is a figure that shows in a simple way how a Tree Ensemble Model works.
 
 ![Tree Ensemble Models](home_credit/images/tree_model.png)
 
@@ -124,7 +124,7 @@ In many real-world problems, it is quite common for the input data to be sparse.
 
 ### Benchmark
 
-The AUC score for a classical Tree Ensemble method, Random Forest, will be used as a baseline. The work *"Predicting borrowers’ chance of defaulting on credit loans."*, by Liang has a similar underlying problem, predict default risk, and the final AUC score was 0.867262 using Random Forests. The full document can be seen here : http://cs229.stanford.edu/proj2011/JunjieLiang-PredictingBorrowersChanceOfDefaultingOnCreditLoans.pdf. Although it's not possible to compare both scores directly, it serves as a justification of the chosen baseline model.
+The AUC score for a classical Tree Ensemble method, Random Forest, will be used as a baseline. The work *"Predicting borrowers’ chance of defaulting on credit loans."*, by Liang has a similar underlying problem, predict default risk, and the final AUC score was 0.867262 using Random Forest. The full document can be seen here : http://cs229.stanford.edu/proj2011/JunjieLiang-PredictingBorrowersChanceOfDefaultingOnCreditLoans.pdf. Although it's not possible to compare both scores directly, it serves as a justification of the chosen baseline model.
 
 The final classifier will use a recent tree boosting algorithm, presented by Tianqi Chen and Carlos Guestrin in 2016, called XGBoost. Once this classifier has many improvements over the classical Random Forest, it's expected that XGBoost performs better. 
 
@@ -133,6 +133,23 @@ The final classifier will use a recent tree boosting algorithm, presented by Tia
 _(approx. 3-5 pages)_
 
 ### Data Preprocessing
+
+As already discussed in other sections of this document, there are some data preprocessing tasks that need to be done in order to transform raw data to a suitable format for machine learning. Also there are some issues like outliers and missing data that need to be addressed. In the Data Exploration section we classified each feature according to the type of values it stores. Now, we're going o focus on transforming Non-numerical features into numbers.
+
+#### Label encoding for discrete features
+
+For discrete features with more than 2 unique values, where going to perform one-hot encoding, and for binary features, we're going to perform label encoding. For the latter, there is one feature vector *text_binary_features*, which is going to be used to select this type of attribute. We then use the *LabelEncoder()* sklearn class to encode the binary features in [0,1]. This transformation also need to be applied in the test dataset to make sure the input is the same on training and predition.
+
+Binary features are complete on the dataset (there's any NaN value), however, the same doesn't occur in the rest of non-numerical features. As shown in the Data Exploration, there are 6 features with missing values. To adjust that, instead of imputing the most frequent term where the value is null, we're going create a new unique value called 'NOT_INF' (short for 'not informed'). In other words, the lack of information will be treated as a information. After assigning 'NOT_INF' to observations with missing data we are ready to perform one-hot encoding.
+
+One-hot encoding can be done easily by the pandas method *pd.get_dummies()* and need to be done for both train and test set. There need to be the same features (columns) in both the training and testing data. When performed One-hot encoding, it has created columns in the training data with categories not represented in the testing data. To adjust the dataset we use the pandas function  *align*, which drops columns of the train dataframe that doesn't exist in test dataframe.
+
+### Dealing with missing data
+
+After we addressed the missing data in discrete features, we need to do the same with numerical features with missing data. 
+
+
+
 In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
 - _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_
 - _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_
