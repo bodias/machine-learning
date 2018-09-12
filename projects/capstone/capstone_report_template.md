@@ -144,10 +144,15 @@ Binary features are complete on the dataset (there's any NaN value), however, th
 
 One-hot encoding can be done easily by the pandas method *pd.get_dummies()* and need to be done for both train and test set. There need to be the same features (columns) in both the training and testing data. When performed One-hot encoding, it has created columns in the training data with categories not represented in the testing data. To adjust the dataset we use the pandas function  *align*, which drops columns of the train dataframe that doesn't exist in test dataframe.
 
+After label encoding we changed our number of features of 121 to 245, but they are all numerical now.
+
 ### Dealing with missing data
 
 After we addressed the missing data in discrete features, we need to do the same with numerical features with missing data. 
 
+XGBoost doesn't need to impute data but RF needs.
+
+Thread the anomaly detected (outlier)
 
 
 In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
