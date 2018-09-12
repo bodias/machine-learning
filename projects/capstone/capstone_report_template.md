@@ -146,11 +146,18 @@ One-hot encoding can be done easily by the pandas method *pd.get_dummies()* and 
 
 After label encoding we changed our number of features of 121 to 245, but they are all numerical now.
 
-### Dealing with missing data
+#### Outliers
 
-After we addressed the missing data in discrete features, we need to do the same with numerical features with missing data. 
+In the *Data Exploration* section we've seen an outlier in *DAYS_EMPLOYED* column. First, a new column will be created to identify observations with this anomaly. It will be called "DAYS_EMPLOYED_OUTL", and will store 1 in case it's an outlier and 0 if it's not. 
 
-XGBoost doesn't need to impute data but RF needs.
+#### Dealing with missing data
+
+After we addressed the missing data in discrete features, we need to do the same with numerical features with missing data. Despite XGBoost automatic handles missing data, as described in its documentation, we need to impute data in order to train our baseline classifier, Random Forest. To be able to train XGBoost without data imputation, we're goint to create a copy of the train and test dataset to perform the next tansformations. 
+There are 61 numerical features with at least one missing value in the dataset. The chart below displays the percentage of missing data for each feature.
+![missing values - numerical](home_credit/images/numerical_features_nullplot.png)
+
+We can clearly see that the majority of columns with more than 49% of missing values are information about building where the client lives. As described in the dataset documents, it is a normalized value, so we're going to replace all null values with the **median** of each feature using numpy function *np.nanmedian()*.
+
 
 Thread the anomaly detected (outlier)
 
