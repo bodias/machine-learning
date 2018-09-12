@@ -22,7 +22,6 @@ entrypoints==0.2.3
 enum34==1.1.6
 functools32==3.2.3.post2
 futures==3.2.0
-ggplot==0.11.5
 html5lib==1.0.1
 hyperlink==18.0.0
 idna==2.7
@@ -40,7 +39,6 @@ jupyter-console==5.2.0
 jupyter-core==4.4.0
 kiwisolver==1.0.1
 markdown2==2.3.5
-Markdown2PDF==0.1.4
 MarkupSafe==1.0
 matplotlib==2.2.2
 mistune==0.8.3
