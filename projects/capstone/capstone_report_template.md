@@ -5,12 +5,12 @@ September 12th, 2018
 
 ## I. Definition
 
-### Project Overview DONE
+### Project Overview 
 Financial data is growing exponentially, helping institutions to improve their relationships with customers, offering tailor made products and reducing the overall risk of a credit operation. Kaggle offers a great opportunity to make good use of machine learning techniques to address a real world problem in a financial institution which borrows money to people that are currently underserved with loans. The main goal of the Kaggle challenge named **Home Credit Default Risk** (https://www.kaggle.com/c/home-credit-default-risk) sponsored by Home Credit Group, is to make use of a variety of alternative data to predict their clients' repayment abilities.
 
 This project will try to answer the main challenge question, *"Can you predict how capable each applicant is of repaying a loan?"* with a decent accuracy, taking into account the results of others challege's applicants. All the data needed to develop the solution is available on Kaggle in the form of .csv files that will be shown in detail later. As a current Fintech employee, which offers banking solutions to more than 700.000 customers in Brazil, it's a great opportunity to merge the Machine Learning techniques learned in the Nanodegree and apply it in my field of work.
 
-### Problem Statement DONE
+### Problem Statement 
 Home Credit is trying to minimize its loss due to loan defaults in a way that they accurately approve credit to customers that are likely to pay their debt. With supervised learning, we are able to build a model to predict their clients' repayment abilities, based on historical data provided by Home Credit through Kaggle.
 
 The final solution will be built as follows :
@@ -30,7 +30,7 @@ AUC ranges in value from 0 to 1. A model whose predictions are 100% wrong has an
 
 ## II. Analysis
 
-### Data Exploration DONE
+### Data Exploration 
 The data provided by Kaggle is comprised of 8 CSV files, with a main train/test file with reference to all the other files through the SK_xxx columns. The file *"HomeCredit_columns_description.csv"* contains information about each column in each file.
 Below is a summary of all 8 files available : 1 main file for training (with target) 1 main file for testing (without the target), and 6 other files containing additional information about each loan.
 
@@ -87,19 +87,26 @@ To summarize, the whole main training dataset was analyzed accordingly to each f
 
 ### Exploratory Visualization
 
-Looking at the training data, it's possible to note that the target variable is not balanced:
+The value we want to predict is either a 0, for the loan was repaid on time, or a 1, indicating the client had payment difficulties. Let's examine how loans are distributed on training data.
+
+![Project Design flow](home_credit/images/target_var_dist.png)
 
 * Number of training instances with TARGET 0 : 282686
 * Number of training instances with TARGET 1 : 24825
 
-![Project Design flow](home_credit/images/target_var_dist.png)
+Looking at the above below, it's possible to see that the target variable is not balanced in the training data. There are more loans that were repaid on time than loans that were not repaid.
 
+There is a high number of features (121) which makes impossible to plot a scatter_matrix to analyse trends over paired data. 
+To focus on the more relevant features, let's see how each feature is correlated with the target using the Pearson Correlation Coefficient through corr() function. All scores below are absolute values, in order to get the top 10 features highly correlated with the target variable, idependently if it's a positive or a negative correlation.
 
+![Top features correlated to TARGET](home_credit/images/top_corr.png)
 
-In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant characteristic or feature about the dataset or input data?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
+The strongest correlation is .17, which is a very weak correlation. It means that raw features alone won't be good predictors of the target variable. Let's take a look at the histogram for each one of the features above, in order to see if the strongest correlated features have any anomaly.
+
+![Top features correlated - histogram](home_credit/images/top_corr_dist.png)
+
+We can se above that there are some binary and continous features. The feature "DAYS_BIRTH" caught my attention because of its maximum value (-25229), but it turns out that it's 69 years in days, which is a valid number.
+
 
 ### Algorithms and Techniques
 To answer the main challenge question, *"Can you predict how capable each applicant is of repaying a loan?"*, a Supervised Machine Learning model will be trained using the data described in the previous section. The trained classifier then will outputs, given some input data, if the customer is able to repay the loan.
@@ -114,15 +121,12 @@ XGBoost is a scalable machine learning system for tree boosting, which is used w
 
 In many real-world problems, it is quite common for the input data to be sparse. There are multiple possible causes for sparsity: 1) presence of missing values in the data; 2) frequent zero entries in the statistics; and, 3) artifacts of feature engineering such as one-hot encoding. XGBoost has a Sparse Aware implementation with automatic handling of missing data values, so there's no need to preprocess these values. Although some data was imputed in order to train Random Forest, the original dataset with missing values will be used on XGBoost to prevent increasing error and bias as consequence of this data imputation.
 
-In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
-- _Are the algorithms you will use, including any default variables/parameters in the project clearly defined?_
-- _Are the techniques to be used thoroughly discussed and justified?_
-- _Is it made clear how the input data or datasets will be handled by the algorithms and techniques chosen?_
 
 ### Benchmark
-In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
-- _Has some result or value been provided that acts as a benchmark for measuring performance?_
-- _Is it clear how this result or value was obtained (whether by data or by hypothesis)?_
+
+The AUC score for a classical Tree Ensemble method, Random Forest, will be used as a baseline. The work *"Predicting borrowers’ chance of defaulting on credit loans."*, by Liang has a similar underlying problem, predict default risk, and the final AUC score was 0.867262 using Random Forests. The full document can be seen here : http://cs229.stanford.edu/proj2011/JunjieLiang-PredictingBorrowersChanceOfDefaultingOnCreditLoans.pdf. Although it's not possible to compare both scores directly, it serves as a justification of the chosen baseline model.
+
+The final classifier will use a recent tree boosting algorithm, presented by Tianqi Chen and Carlos Guestrin in 2016, called XGBoost. Once this classifier has many improvements over the classical Random Forest, it's expected that XGBoost performs better. 
 
 
 ## III. Methodology
