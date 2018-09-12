@@ -14,12 +14,11 @@ This project will try to answer the main challenge question, *"Can you predict h
 Home Credit is trying to minimize its loss due to loan defaults in a way that they accurately approve credit to customers that are likely to pay their debt. With supervised learning, we are able to build a model to predict their clients' repayment abilities, based on historical data provided by Home Credit through Kaggle.
 
 The final solution will be built as follows :
-1. Load files provided by Kaggle;
-2. Perform an Exploratory Analysis of the dataset;
-3. Transform data to a suitable format to the machine learning algorithms;
-4. Train a baseline model, and a state of the art model; 
-5. Evaluate model results and adjust parameters;
-6. Predict results on the test data and submit it to Kaggle to obtain the final score.
+1. Perform an Exploratory Analysis of the dataset;
+2. Transform data to a suitable format to the machine learning algorithms;
+3. Train a baseline model, and a state of the art model; 
+4. Evaluate model results and adjust parameters;
+5. Predict results on the test data and submit it to Kaggle to obtain the final score.
 
 The final score will be obtained after submitting test predictions to Kaggle.
 
@@ -86,7 +85,6 @@ It's also possible to note that there are **missing** values for some features, 
 To summarize, the whole main training dataset was analyzed accordingly to each feature data type. This process also separated the features into continuous (int and float features) and discrete (int/text binary features, discrete with many levels) features. With this distinction it will be possible to perform *label encoding* over discrete features in order to have them in a suitable format to train a machine learning model.
 
 ### Exploratory Visualization
-
 The value we want to predict is either a 0, for the loan was repaid on time, or a 1, indicating the client had payment difficulties. Let's examine how loans are distributed on training data.
 
 ![Project Design flow](home_credit/images/target_var_dist.png)
@@ -115,7 +113,7 @@ The selected classification algorithms are Random Forest and XGBoost. The former
 
 Random Forest is a classical ensemble algorithm invented by Breiman and Cutler. It was chosen as a baseline because it's a simple method - and by its ensemble nature does not require much feature engineering - with a decent performance, and runs efficiently on large tabular, structured data. Although it works well with predefined parameters, it doesn't handle missing data. So, in order to train the model, all  missing values must be treated either removing the feature or imputing data.
 
-XGBoost is a scalable machine learning system for tree boosting, which is used widely by data scientists to achieve state-of-the-art results on many machine learning challenges. Both selected methods are classified as Tree Ensemble Models, whose the final prediction for a given example is the sum of predictions from each tree. Below is a figure that shows in a simple way how a Tree Ensemble Model works.
+XGBoost is a scalable machine learning system for tree boosting, which is used widely by data scientists to achieve state of the art results on many machine learning challenges. Both selected methods are classified as Tree Ensemble Models, whose the final prediction for a given example is the sum of predictions from each tree. Below is a figure that shows in a simple way how a Tree Ensemble Model works.
 
 ![Tree Ensemble Models](home_credit/images/tree_model.png)
 
@@ -123,7 +121,6 @@ In many real-world problems, it is quite common for the input data to be sparse.
 
 
 ### Benchmark
-
 The AUC score for a classical Tree Ensemble method, Random Forest, will be used as a baseline. The work *"Predicting borrowers’ chance of defaulting on credit loans."*, by Liang has a similar underlying problem, predict default risk, and the final AUC score was 0.867262 using Random Forest. The full document can be seen here : http://cs229.stanford.edu/proj2011/JunjieLiang-PredictingBorrowersChanceOfDefaultingOnCreditLoans.pdf. Although it's not possible to compare both scores directly, it serves as a justification of the chosen baseline model.
 
 The final classifier will use a recent tree boosting algorithm, presented by Tianqi Chen and Carlos Guestrin in 2016, called XGBoost. Once this classifier has many improvements over the classical Random Forest, it's expected that XGBoost performs better. 
@@ -133,11 +130,9 @@ The final classifier will use a recent tree boosting algorithm, presented by Tia
 _(approx. 3-5 pages)_
 
 ### Data Preprocessing
-
 As already discussed in other sections of this document, there are some data preprocessing tasks that need to be done in order to transform raw data to a suitable format for machine learning. Also there are some issues like outliers and missing data that need to be addressed. In the Data Exploration section we classified each feature according to the type of values it stores. Now, we're going o focus on transforming Non-numerical features into numbers.
 
 #### Label encoding for discrete features
-
 For discrete features with more than 2 unique values, where going to perform one-hot encoding, and for binary features, we're going to perform label encoding. For the latter, there is one feature vector *text_binary_features*, which is going to be used to select this type of attribute. We then use the *LabelEncoder()* sklearn class to encode the binary features in [0,1]. This transformation also need to be applied in the test dataset to make sure the input is the same on training and predition.
 
 Binary features are complete on the dataset (there's any NaN value), however, the same doesn't occur in the rest of non-numerical features. As shown in the Data Exploration, there are 6 features with missing values. To adjust that, instead of imputing the most frequent term where the value is null, we're going create a new unique value called 'NOT_INF' (short for 'not informed'). In other words, the lack of information will be treated as a information. After assigning 'NOT_INF' to observations with missing data we are ready to perform one-hot encoding.
@@ -147,33 +142,58 @@ One-hot encoding can be done easily by the pandas method *pd.get_dummies()* and 
 After label encoding we changed our number of features of 121 to 245, but they are all numerical now.
 
 #### Outliers
+In the *Data Exploration* section we've seen an outlier in *DAYS_EMPLOYED* column. First, a new boolean column indicating whether or not the value was anomalous will be created. It will be called "DAYS_EMPLOYED_OUTL", and will store 1 in case it's an outlier and 0 if it's not. Then, those outliers will be set to NaN using numpy *np.nan*. Below we can see two histograms showing the distribution of the DAYS_EMPLOYED values before and after removing the outliers.
 
-In the *Data Exploration* section we've seen an outlier in *DAYS_EMPLOYED* column. First, a new column will be created to identify observations with this anomaly. It will be called "DAYS_EMPLOYED_OUTL", and will store 1 in case it's an outlier and 0 if it's not. 
+![DAYS_EMPLOYED outlier](home_credit/images/outlier_removal.png)
+
+The resulting distribution shape seems more reasonable now, and we also added a new feature to track if the observation was originally anomalous. Note that we must run the same process for both train and test dataset. In the next section the NaN value introduced will be treated together with the other features containing NaN values.
 
 #### Dealing with missing data
-
 After we addressed the missing data in discrete features, we need to do the same with numerical features with missing data. Despite XGBoost automatic handles missing data, as described in its documentation, we need to impute data in order to train our baseline classifier, Random Forest. To be able to train XGBoost without data imputation, we're goint to create a copy of the train and test dataset to perform the next tansformations. 
 There are 61 numerical features with at least one missing value in the dataset. The chart below displays the percentage of missing data for each feature.
+
 ![missing values - numerical](home_credit/images/numerical_features_nullplot.png)
 
 We can clearly see that the majority of columns with more than 49% of missing values are information about building where the client lives. As described in the dataset documents, it is a normalized value, so we're going to replace all null values with the **median** of each feature using numpy function *np.nanmedian()*.
 
 
-Thread the anomaly detected (outlier)
-
-
-In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
-- _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_
-- _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_
-- _If no preprocessing is needed, has it been made clear why?_
-
 ### Implementation
-In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section:
-- _Is it made clear how the algorithms and techniques were implemented with the given datasets or input data?_
-- _Were there any complications with the original metrics or techniques that required changing prior to acquiring a solution?_
-- _Was there any part of the coding process (e.g., writing complicated functions) that should be documented?_
+
+The implementation consists of training and evaluate two classification algorithms and report their AUC score:
+    1. Train a baseline model - Random Forest - and analyse its predition results over a validation set;
+    2. Train a state of the art model - XGBoost - and analyse its predition results over a validation set.
+    3. Train a state of the art model with imputed data - XGBoost - and analyse its predition results over a validation set.
+
+#### Random Forest
+The baseline model, Random Forest, will be trained with the **preprocessed train data, without NaN values**. During this stage the sklearn *RandomForestClassifier()* will be used with its default parameters, using cross-validation with 10 folds. The scoring function is 'roc_auc'.
+
+![Random Forest score](home_credit/images/baseline_score.png)
+
+
+#### XGBoost
+Now the competition winner XGBoost will be trained with the **preprocessed train data, including NaN values**. As discussed before in this document, XGBoost can handle missing data and so it will be used with its default parameters. The remaining settings will be kept : cross-validation with 10 folds and scoring function is 'roc_auc'.
+
+![XGBoost score](home_credit/images/xgboost_score.png)
+
+To check if the data imputation process really degrade the final score, let's also train a XGBoost classifier with **preprocessed train data, without NaN values**, the same dataset used with Random Forest. All the remaining settings are the same as the two previous runs.
+
+![XGBoost with data imputation](home_credit/images/xgboost_imputed_score.png)
 
 ### Refinement
+
+The first results with default parameters were not bad, and we can clearly see that XGBoost is more robust than Random Forest. However, we can make use of a well known technique for parameter optimization called Grid-search. Grid-searching is the process of scanning the data to configure optimal parameters for a given model. Depending on the type of model utilized, certain parameters are necessary. It is important to note that Grid-searching can be extremely computationally expensive and may take your machine quite a long time to run. Grid-Search will build a model on each parameter combination possible. It iterates through every parameter combination and stores a model for each combination.
+
+Due to the lack of computational resources, the number of parameters and range of each one will be limited. The table below shows each parameter that will be tested and their possible values. First, let's setup the parameters for Random Forest:
+
+|  Parameter            | Possible Values |
+| :-------------------: | :---------------: |
+| **Max_depth**         |    [10,50]        |      
+| **min_samples_leaf**  |    [1,4]          |
+| **min_samples_split** |    [2,10]         |  
+| **n_estimators**      |    [200,1000]     |       
+
+
+
 In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
 - _Has an initial solution been found and clearly reported?_
 - _Is the process of improvement clearly documented, such as what techniques were used?_
@@ -182,7 +202,7 @@ In this section, you will need to discuss the process of improvement you made up
 
 ## IV. Results
 _(approx. 2-3 pages)_
-
+# FALTA
 ### Model Evaluation and Validation
 In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear how the final model was derived and why this model was chosen. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
 - _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_
@@ -190,7 +210,23 @@ In this section, the final model and any supporting qualities should be evaluate
 - _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
 - _Can results found from the model be trusted?_
 
+# FALTA
 ### Justification
+Both selected models are widely used as a classifier for tabular structured data with a decent performance. Based on the achieved results, we proved the hypothesis that XGBoost performs better than Random Forest, without much penalty from a computational resources perspective. Below is a table that compares the best model achieved for each algorithm.
+
+|  Algorithm           | AUC               |  Training time | Prediction time |
+| :-------------------:| :---------------: | :---------------: |:---------------: |
+| **Random Forest**    |                   |                   |                  |      
+| **XGBoost**          |        (+x%)        |            (+xs)       |          (-xs)        |
+     
+
+
+
+
+Gráfico com as AUC curves?
+
+dizer que o modelo do paper da chinesa tinha menor complexidade
+
 In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
 - _Are the final results found stronger than the benchmark result reported earlier?_
 - _Have you thoroughly analyzed and discussed the final solution?_
@@ -198,8 +234,8 @@ In this section, your model’s final solution and its results should be compare
 
 
 ## V. Conclusion
-_(approx. 1-2 pages)_
 
+# FALTA
 ### Free-Form Visualization
 In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
 - _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_
@@ -207,17 +243,18 @@ In this section, you will need to provide some form of visualization that emphas
 - _If a plot is provided, are the axes, title, and datum clearly defined?_
 
 ### Reflection
-In this section, you will summarize the entire end-to-end problem solution and discuss one or two particular aspects of the project you found interesting or difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section:
-- _Have you thoroughly summarized the entire process you used for this project?_
-- _Were there any interesting aspects of the project?_
-- _Were there any difficult aspects of the project?_
-- _Does the final model and solution fit your expectations for the problem, and should it be used in a general setting to solve these types of problems?_
+The process used for this project was comprised of 5 major tasks:
+1. Perform an Exploratory Analysis of the dataset;
+2. Transform data to a suitable format to the machine learning algorithms;
+3. Train a baseline model, and a state of the art model; 
+4. Evaluate model results and adjust parameters;
+5. Predict results on the test data and submit it to Kaggle to obtain the final score.
+
+Among all these steps, the Exploratory Analysis was by far the most difficult task. The chosen dataset contains a lot of features which makes difficult to analyse every 121 original features in detail. There are some traditional data visualization techniques that cannot be aplied to such a high dimensional dataset. Also, some domain knowledge is needed in order to understand how they can help the model or being discarded from the training data. But in the end, the whole project was an interesting case on how well a machine learning algorithm can perform in a real world problem. The final score was somewhat close to the kaggle top scorers. Also, as a new employee of a financial institution, the knowledge obtained doing this project will certainly improve my career.
 
 ### Improvement
-In this section, you will need to provide discussion as to how one aspect of the implementation you designed could be improved. As an example, consider ways your implementation can be made more general, and what would need to be modified. You do not need to make this improvement, but the potential solutions resulting from these changes are considered and compared/contrasted to your current solution. Questions to ask yourself when writing this section:
-- _Are there further improvements that could be made on the algorithms or techniques you used in this project?_
-- _Were there algorithms or techniques you researched that you did not know how to implement, but would consider using if you knew how?_
-- _If you used your final solution as the new benchmark, do you think an even better solution exists?_
+From a machine learning perspective, there is another tree based algorithm called LightGBM that could be tested against XGBoost. It has proven to be a good option for classification problems and it's being adopted as one of the most used algorithms on kaggle competitions. Also, Bayesian optimization methods for hyperparameter tuning could have helped find the best set of hyperparameters for this problem. 
+I believe as a future work I would test LightGBM, Bayesian optimization and also would spend more time analysing each feature and try to come up with new features to improve the score.
 
 -----------
 
