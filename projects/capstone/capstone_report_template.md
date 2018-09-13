@@ -8,7 +8,7 @@ September 12th, 2018
 ### Project Overview 
 Financial data is growing exponentially, helping institutions to improve their relationships with customers, offering tailor made products and reducing the overall risk of a credit operation. Kaggle offers a great opportunity to make good use of machine learning techniques to address a real world problem in a financial institution which borrows money to people that are currently underserved with loans. The main goal of the Kaggle challenge named **Home Credit Default Risk** (https://www.kaggle.com/c/home-credit-default-risk) sponsored by Home Credit Group, is to make use of a variety of alternative data to predict their clients' repayment abilities.
 
-This project will try to answer the main challenge question, *"Can you predict how capable each applicant is of repaying a loan?"* with a decent accuracy, taking into account the results of others challege's applicants. All the data needed to develop the solution is available on Kaggle in the form of .csv files that will be shown in detail later. As a current Fintech employee, which offers banking solutions to more than 700.000 customers in Brazil, it's a great opportunity to merge the Machine Learning techniques learned in the Nanodegree and apply it in my field of work.
+This project will try to answer the main challenge question, *"Can you predict how capable each applicant is of repaying a loan?"* with an acceptable accuracy. All the data needed to develop the solution is available on Kaggle in the form of .csv files that will be shown in detail later. As a current Fintech employee, which offers banking solutions to more than 700.000 customers in Brazil, it's a great opportunity to merge the Machine Learning techniques learned in the Nanodegree and apply it in my field of work.
 
 ### Problem Statement 
 Home Credit is trying to minimize its loss due to loan defaults in a way that they accurately approve credit to customers that are likely to pay their debt. With supervised learning, we are able to build a model to predict their clients' repayment abilities, based on historical data provided by Home Credit through Kaggle.
@@ -35,7 +35,7 @@ Below is a summary of all 8 available files : 1 main file for training (with tar
 
 ![File stats](home_credit/images/file_stats.png)
 
-The training data has 307511 observations (each one a separate loan) and 121 features (variables) plus the TARGET (the label we want to predict). The test data folows the same structure, but it has 48744 observations and lacks the TARGET column.
+The training data has 307511 observations (each one a separate loan) and 121 features (variables) plus the TARGET (the label we want to predict). The test data follows the same structure, but it has 48744 observations and lacks the TARGET column.
 
 We can see the first 10 observations of the main training data below :
 
@@ -95,7 +95,7 @@ The value we want to predict is either a 0, for the loan was repaid on time, or 
 Looking at the chart above, it's possible to see that the target variable is not balanced in the training data. There are more loans that were repaid on time than loans that were not repaid.
 
 Another interesting characteristic of the data is its high number of features (121) which makes impossible to plot a scatter_matrix to analyse trends over paired data. 
-To focus on the more relevant features, let's see how each feature is correlated with the target using the Pearson Correlation Coefficient through corr() function. All scores below are absolute values, this way we obtain the top 10 features highly correlated with the target variable, idependently if it's a positive or a negative correlation.
+To focus on the more relevant features, let's see how each feature is correlated with the target using the Pearson Correlation Coefficient through corr() function. All scores below are absolute values, this way we obtain the top 10 features highly correlated with the target variable, independently if it's a positive or a negative correlation.
 
 ![Top features correlated to TARGET](home_credit/images/top_corr.png)
 
@@ -103,7 +103,7 @@ The strongest correlation is .17, which is a very weak correlation. It means tha
 
 ![Top features correlated - histogram](home_credit/images/top_corr_dist.png)
 
-We can se above that there are some binary and continous features. The feature "DAYS_BIRTH" caught my attention because of its maximum value (-25229), but it turns out that it's 69 years in days, which is a valid number.
+We can see above that there are some binary and continuous features. The feature "DAYS_BIRTH" caught my attention because of its maximum value (-25229), but it turns out that it's 69 years in days, which is a valid number.
 
 
 ### Algorithms and Techniques
@@ -121,7 +121,7 @@ In many real-world problems, it is quite common for the input data to be sparse.
 
 
 ### Benchmark
-The AUC score for a classical Tree Ensemble method, Random Forest, will be used as a baseline. The work *"Predicting borrowers’ chance of defaulting on credit loans."*, by Liang has a similar underlying problem, predict default risk, and the final AUC score was 0.867262 using Random Forest. The full document can be seen here : http://cs229.stanford.edu/proj2011/JunjieLiang-PredictingBorrowersChanceOfDefaultingOnCreditLoans.pdf. Although it's not possible to compare both scores directly, because the dataset is completely differente, it serves as a justification of the chosen baseline model.
+The AUC score for a classical Tree Ensemble method, Random Forest, will be used as a baseline. The work *"Predicting borrowers’ chance of defaulting on credit loans."*, by Liang has a similar underlying problem, predict default risk, and the final AUC score was 0.867262 using Random Forest. The full document can be seen here : http://cs229.stanford.edu/proj2011/JunjieLiang-PredictingBorrowersChanceOfDefaultingOnCreditLoans.pdf. Although it's not possible to compare both scores directly, because the dataset is completely different, it serves as a justification of the chosen baseline model.
 
 The final classifier will use a recent tree boosting algorithm, presented by Tianqi Chen and Carlos Guestrin in 2016, called XGBoost. Once this classifier has many improvements over the classical Random Forest, it's expected that XGBoost performs better. 
 
@@ -129,10 +129,10 @@ The final classifier will use a recent tree boosting algorithm, presented by Tia
 ## III. Methodology
 
 ### Data Preprocessing
-As already discussed in other sections of this document, there are some data preprocessing tasks that need to be done in order to transform raw data to a suitable format for machine learning. Also there are some issues like outliers and missing data that need to be addressed. In the Data Exploration section we classified each feature according to the type of values it stores. Now, we're going o focus on transforming Non-numerical features into numbers.
+As already discussed in other sections of this document, there are some data preprocessing tasks that need to be done in order to transform raw data to a suitable format for machine learning. Also there are some issues like outliers and missing data that need to be addressed. In the Data Exploration section we classified each feature according to the type of values it stores. Now, we're going to focus on transforming Non-numerical features into numbers.
 
 #### Label encoding for discrete features
-For discrete features with more than 2 unique values, where going to perform one-hot encoding, and for binary features we're going to perform label encoding. For the latter, there is one feature vector *text_binary_features*, which is going to be used to select this type of attribute. We then use the *LabelEncoder()* sklearn class to encode the binary features in [0,1]. This transformation also need to be applied in the test dataset to make sure the input is the same on training and predition.
+For discrete features with more than 2 unique values, where going to perform one-hot encoding, and for binary features we're going to perform label encoding. For the latter, there is one feature vector *text_binary_features*, which is going to be used to select this type of attribute. We then use the *LabelEncoder()* sklearn class to encode the binary features in [0,1]. This transformation also need to be applied in the test dataset to make sure the input is the same on training and prediction.
 
 Binary features are complete on the dataset (there is no NaN values), however, the same doesn't occur in the rest of non-numerical features. As shown in the Data Exploration, there are 6 features with missing values. To adjust that, instead of imputing the most frequent term where the value is null, we're going create a new unique value called 'NOT_INF' (short for 'not informed'). In other words, the lack of information will be treated as information. After assigning 'NOT_INF' to observations with missing data we are ready to perform one-hot encoding.
 
@@ -148,7 +148,7 @@ In the *Data Exploration* section we've seen an outlier in *DAYS_EMPLOYED* colum
 The resulting distribution shape seems more reasonable now, and we also added a new feature to track if the observation was originally anomalous. Note that we must run the same process for both train and test dataset. In the next section the NaN value introduced by this data cleansing will be treated together with the other features containing NaN values.
 
 #### Dealing with missing data
-After we addressed the missing data in discrete features, we need to do the same with numerical features. Despite XGBoost automatic handles missing data, as described in its documentation, we need to impute data in order to train our baseline classifier, Random Forest. To be able to train XGBoost without data imputation, we're goint to create a copy of the train and test dataset to perform the next tansformations. 
+After we addressed the missing data in discrete features, we need to do the same with numerical features. Despite XGBoost automatic handles missing data, as described in its documentation, we need to impute data in order to train our baseline classifier, Random Forest. To be able to train XGBoost without data imputation, we're going to create a copy of the train and test dataset to perform the next transformations. 
 There are 61 numerical features with at least one missing value in the dataset. The chart below displays the percentage of missing data for each feature.
 
 ![missing values - numerical](home_credit/images/numerical_features_nullplot.png)
@@ -158,9 +158,9 @@ We can clearly see that the majority of columns with more than 49% of missing va
 
 ### Implementation
 The implementation consists of training and evaluate two classification algorithms and report their AUC score:
-1. Train a baseline model - Random Forest - and analyse its predition results over a validation set;
-2. Train a state of the art model - XGBoost - and analyse its predition results over a validation set.
-3. Train a state of the art model with imputed data - XGBoost - and analyse its predition results over a validation set.
+1. Train a baseline model - Random Forest - and analyse its prediction results over a validation set;
+2. Train a state of the art model - XGBoost - and analyse its prediction results over a validation set.
+3. Train a state of the art model with imputed data - XGBoost - and analyse its prediction results over a validation set.
 
 #### Random Forest
 The baseline model, Random Forest, will be trained with the **preprocessed train data, without NaN values**. During this stage the sklearn *RandomForestClassifier()* will be used with its default parameters, using cross-validation with 10 folds. The scoring function is 'roc_auc'.
@@ -190,7 +190,16 @@ Due to the lack of computational resources, the number of parameters and range o
 | **min_samples_split** |    [2,10]         |  
 | **n_estimators**      |    [200,1000]     |       
 
+The configuration above resulted in 16 models (2 x 2 x 2 x 2) and took approximately X hours to train. The final AUC score for the best model selected by the Grid Search was XX.
 
+TALK ABOUT THE IMPROVEMENT
+
+Below is a summary of all runs for each classifier and it's score. The ones __***highlited***__ are the candidates for submission on Kaggle.
+
+|  Algorithm           | AUC               |  Training time | Prediction time |
+| :-------------------:| :---------------: | :---------------: |:---------------: |
+| **Random Forest**    |                   |                   |                  |      
+| **XGBoost**          |        (+x%)        |            (+xs)       |          (-xs)        |
 
 In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
 - _Has an initial solution been found and clearly reported?_
@@ -202,7 +211,11 @@ In this section, you will need to discuss the process of improvement you made up
 _(approx. 2-3 pages)_
 # FALTA
 ### Model Evaluation and Validation
-In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear how the final model was derived and why this model was chosen. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
+The best model was the XGBoost, with the parameters set obtained through Grid-search, with a test AUC score of XX. 
+
+
+
+In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear **how the final model was derived and why this model was chosen**. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
 - _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_
 - _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_
 - _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
@@ -235,6 +248,10 @@ In this section, your model’s final solution and its results should be compare
 
 # FALTA
 ### Free-Form Visualization
+
+
+
+
 In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
 - _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_
 - _Is the visualization thoroughly analyzed and discussed?_
@@ -248,7 +265,7 @@ The process used for this project was comprised of 5 major tasks:
 4. Evaluate model results and adjust parameters;
 5. Predict results on the test data and submit it to Kaggle to obtain the final score.
 
-Among all these steps, the Exploratory Analysis was by far the most difficult task. The chosen dataset contains a lot of features which makes difficult to analyse every 121 original features in detail. There are some traditional data visualization techniques that cannot be aplied to such a high dimensional dataset. Also, some domain knowledge is needed in order to understand how they can help the model or being discarded from the training data. But in the end, the whole project was an interesting case on how well a machine learning algorithm can perform in a real world problem. The final score was somewhat close to the kaggle top scorers. Also, as a new employee of a financial institution, the knowledge obtained doing this project will certainly improve my career.
+Among all these steps, the Exploratory Analysis was by far the most difficult task. The chosen dataset contains a lot of features which makes difficult to analyse every 121 original features in detail. There are some traditional data visualization techniques that cannot be applied to such a high dimensional dataset. Also, some domain knowledge is needed in order to understand how they can help the model or being discarded from the training data. But in the end, the whole project was an interesting case on how well a machine learning algorithm can perform in a real world problem. The final score was somewhat close to the kaggle top scorers. Also, as a new employee of a financial institution, the knowledge obtained doing this project will certainly improve my career.
 
 ### Improvement
 From a machine learning perspective, there is another tree based algorithm called LightGBM that could be tested against XGBoost. It has proven to be a good option for classification problems and it's being adopted as one of the most used algorithms on kaggle competitions. Also, Bayesian optimization methods for hyperparameter tuning could have helped find the best set of hyperparameters for this problem. 
