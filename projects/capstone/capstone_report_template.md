@@ -163,15 +163,19 @@ The implementation consists of training and evaluate two classification algorith
 3. Train a state of the art model with imputed data - XGBoost - and analyse its prediction results over a validation set.
 
 #### Random Forest
-The baseline model, Random Forest, will be trained with the **preprocessed train data, without NaN values**. During this stage the sklearn *RandomForestClassifier()* will be used with its default parameters, using cross-validation with 10 folds. The scoring function is 'roc_auc'.
+The baseline model, Random Forest, will be trained with the **preprocessed train data, without NaN values**. During this stage the sklearn *RandomForestClassifier()* will be used with its default parameters, using cross-validation with 5 folds. The scoring function is 'roc_auc'.
 
 ![Random Forest score](home_credit/images/baseline_score.png)
 
+The AUC score over the test set submitted to Kaggle was XX.
+
 
 #### XGBoost
-Now the competition winner XGBoost will be trained with the **preprocessed train data, including NaN values**. As discussed before in this document, XGBoost can handle missing data and so it will be used with its default parameters. The remaining settings will be kept : cross-validation with 10 folds and scoring function is 'roc_auc'.
+Now the competition winner XGBoost will be trained with the **preprocessed train data, including NaN values**. As discussed before in this document, XGBoost can handle missing data and so it will be used with its default parameters. The remaining settings will be kept : cross-validation with 5 folds and scoring function is 'roc_auc'.
 
 ![XGBoost score](home_credit/images/xgboost_score.png)
+
+The AUC score over the test set submitted to Kaggle was XX.
 
 To check if the data imputation process really degrade the final score, let's also train a XGBoost classifier with **preprocessed train data, without NaN values**, the same dataset used with Random Forest. All the remaining settings are the same as the two previous runs.
 
@@ -185,21 +189,15 @@ Due to the lack of computational resources, the number of parameters and range o
 
 |  Parameter            | Possible Values |
 | :-------------------: | :---------------: |
-| **max_depth**         |    [10,50]        |      
+| **max_depth**         |    [None,10,50]        |      
 | **min_samples_leaf**  |    [1,4]          |
-| **min_samples_split** |    [2,10]         |  
-| **n_estimators**      |    [200,1000]     |       
+| **n_estimators**      |    [50,100,200]     |       
 
 The configuration above resulted in 16 models (2 x 2 x 2 x 2) and took approximately X hours to train. The final AUC score for the best model selected by the Grid Search was XX.
 
 TALK ABOUT THE IMPROVEMENT
 
-Below is a summary of all runs for each classifier and it's score. The ones __***highlited***__ are the candidates for submission on Kaggle.
 
-|  Algorithm           | AUC               |  Training time | Prediction time |
-| :-------------------:| :---------------: | :---------------: |:---------------: |
-| **Random Forest**    |                   |                   |                  |      
-| **XGBoost**          |        (+x%)        |            (+xs)       |          (-xs)        |
 
 In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
 - _Has an initial solution been found and clearly reported?_
@@ -223,20 +221,15 @@ In this section, the final model and any supporting qualities should be evaluate
 
 # FALTA
 ### Justification
-Both selected models are widely used as a classifier for tabular structured data with a decent performance. Based on the achieved results, we proved the hypothesis that XGBoost performs better than Random Forest, without much penalty from a computational resources perspective. Below is a table that compares the best model achieved for each algorithm.
+Both selected models are widely used as a classifier for tabular structured data with a decent performance. Based on the achieved results, we proved the hypothesis that XGBoost performs better than Random Forest, without much penalty from a computational resources perspective. Below is a table that summarizes all the runs. The one __***highlited***__ was the best score achieved.
 
-|  Algorithm           | AUC               |  Training time | Prediction time |
-| :-------------------:| :---------------: | :---------------: |:---------------: |
-| **Random Forest**    |                   |                   |                  |      
-| **XGBoost**          |        (+x%)        |            (+xs)       |          (-xs)        |
-     
+|  Algorithm                         | AUC Train         |   AUC Test        | Training time |
+| :---------------------------------:| :---------------: | :---------------: |:---------------: |
+| **Random Forest CV5 - default**    |      0.9998       |     0.6318        |      76.90s      |      
+| **XGBoost CV5 - default**          |      0.7598       |     0.7513        |     707.35s      |
+| **Random Forest CV5 - GridSearch** |                   |                   |                  |      
+| **XGBoost CV5 - GridSearch**       |                   |                   |                  |     
 
-
-
-
-Gráfico com as AUC curves?
-
-dizer que o modelo do paper da chinesa tinha menor complexidade
 
 In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
 - _Are the final results found stronger than the benchmark result reported earlier?_
@@ -249,7 +242,7 @@ In this section, your model’s final solution and its results should be compare
 # FALTA
 ### Free-Form Visualization
 
-
+final AUC curve
 
 
 In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
