@@ -160,14 +160,13 @@ We can clearly see that the majority of columns with more than 49% of missing va
 The implementation consists of training and evaluate two classification algorithms and report their AUC score:
 1. Train a baseline model - Random Forest - and analyse its prediction results over a validation set;
 2. Train a state of the art model - XGBoost - and analyse its prediction results over a validation set.
-3. Train a state of the art model with imputed data - XGBoost - and analyse its prediction results over a validation set.
 
 #### Random Forest
 The baseline model, Random Forest, will be trained with the **preprocessed train data, without NaN values**. During this stage the sklearn *RandomForestClassifier()* will be used with its default parameters, using cross-validation with 5 folds. The scoring function is 'roc_auc'.
 
 ![Random Forest score](home_credit/images/baseline_score.png)
 
-The AUC score over the test set submitted to Kaggle was XX.
+The averaged AUC score over the validation data was 0.6318.
 
 
 #### XGBoost
@@ -175,13 +174,8 @@ Now the competition winner XGBoost will be trained with the **preprocessed train
 
 ![XGBoost score](home_credit/images/xgboost_score.png)
 
-The AUC score over the test set submitted to Kaggle was XX.
+The averaged AUC score over the validation data was 0.7513.
 
-To check if the data imputation process really degrade the final score, let's also train a XGBoost classifier with **preprocessed train data, without NaN values**, the same dataset used with Random Forest. All the remaining settings are the same as the two previous runs.
-
-![XGBoost with data imputation](home_credit/images/xgboost_imputed_score.png)
-
-# FALTA
 ### Refinement
 The first results with default parameters were not bad, and we can clearly see that XGBoost is more robust than Random Forest. However, we can make use of a well known technique for parameter optimization called Grid-search. Grid-searching is the process of scanning the data to configure optimal parameters for a given model. Depending on the type of model utilized, certain parameters are necessary. It is important to note that Grid-searching can be extremely computationally expensive and may take your machine quite a long time to run. Grid-Search will build a model on each parameter combination possible. It iterates through every parameter combination and stores a model for each combination.
 
@@ -193,62 +187,59 @@ Due to the lack of computational resources, the number of parameters and range o
 | **min_samples_leaf**  |    [1,4]          |
 | **n_estimators**      |    [50,100,200]     |       
 
-The configuration above resulted in 16 models (2 x 2 x 2 x 2) and took approximately X hours to train. The final AUC score for the best model selected by the Grid Search was XX.
+The configuration above resulted in 18 models (3 x 2 x 3) and took approximately 2711 seconds (~45 minutes) to train all the models. The validation AUC score for the best model selected by the Grid Search was 0.7337. It is a huge improvement over the previous 0.6318 reported score using the default parameters.
 
-TALK ABOUT THE IMPROVEMENT
+Next, let's perform a grid search on XGBoost.
 
+|  Parameter            | Possible Values |
+| :-------------------: | :---------------: |
+| **max_depth**         |    range(3,10,2)        |      
+| **min_child_weight**  |    range(1,6,2)          |
+| **gamma**             |    [i/10.0 for i in range(0,5)]
+| **n_estimators**      |    [200,500]     |    
 
-
-In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
-- _Has an initial solution been found and clearly reported?_
-- _Is the process of improvement clearly documented, such as what techniques were used?_
-- _Are intermediate and final solutions clearly reported as the process is improved?_
+The configuration above resulted in 120 models (4 x 3 x 5 x 2) and took approximately 2711 seconds (~45 minutes) to train all the models. The validation AUC score for the best model selected by the Grid Search was 0.7600. The previous score with default parameters was 0.7513, so It did't improve enough the score to justify the long time running grid search.
 
 
 ## IV. Results
-_(approx. 2-3 pages)_
-# FALTA
 ### Model Evaluation and Validation
-The best model was the XGBoost, with the parameters set obtained through Grid-search, with a test AUC score of XX. 
+The best model was the XGBoost, with the parameters set obtained through Grid-search, with a validation AUC score of 0.7600. The final XGBoost parameters are listed below:
 
+|  Parameter            | Original Value |  Final Value |
+| :-------------------: | :---------------: | :---------------: |
+| **max_depth**         |   3     |  3        |      
+| **min_child_weight**  |   1     |  3        |
+| **gamma**             |  0.0    |  0.0      |
+| **n_estimators**      |  100    |  500      | 
 
+The biggest change was the number of boosted trees to fit, determined by the n_estimators param. With more trees the classifier was able to capture all the complexity of the data. However, the training time increased from 707s to 1742s.
 
-In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear **how the final model was derived and why this model was chosen**. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
-- _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_
-- _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_
-- _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
-- _Can results found from the model be trusted?_
+With this model in hand, we made predictions over the unlabeled test data set provided by Kaggle and submited it to Kaggle to obtain the results.
+
+The optimized XGBoost scored **0.74724** on the private leaderboard, which is calculated with approximately 80% of the test data, according to Kaggle. Based on the final leaderbord scores, this result is not so far from the best score - 0.80570.
+
 
 # FALTA
 ### Justification
 Both selected models are widely used as a classifier for tabular structured data with a decent performance. Based on the achieved results, we proved the hypothesis that XGBoost performs better than Random Forest, without much penalty from a computational resources perspective. Below is a table that summarizes all the runs. The one __***highlited***__ was the best score achieved.
 
-|  Algorithm                         | AUC Train         |   AUC Test        | Training time |
-| :---------------------------------:| :---------------: | :---------------: |:---------------: |
-| **Random Forest CV5 - default**    |      0.9998       |     0.6318        |      76.90s      |      
-| **XGBoost CV5 - default**          |      0.7598       |     0.7513        |     707.35s      |
-| **Random Forest CV5 - GridSearch** |                   |                   |                  |      
-| **XGBoost CV5 - GridSearch**       |                   |                   |                  |     
+|  Algorithm                         | AUC Validation    |   AUC Test (kaggle)| Training time |
+| :---------------------------------:| :---------------: | :----------------: |:---------------: |
+| **Random Forest CV5 - default**    |      0.6317       |     0.60101        |      76.90s      |      
+| **XGBoost CV5 - default**          |      0.7513       |     0.73608       |     707.35s      |
+| **Random Forest CV5 - GridSearch** |      0.7337       |     0.71876       |     549.21s      |      
+| __***XGBoost CV5 - GridSearch***__ |      0.7600       |     0.74724       |     1742.33s     |     
 
-
-In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
-- _Are the final results found stronger than the benchmark result reported earlier?_
-- _Have you thoroughly analyzed and discussed the final solution?_
-- _Is the final solution significant enough to have solved the problem?_
+The best result achieved in the private leaderboard is 0.80570. With a simple approach for feature engineering the XGBoost model proposed by this document achieved 0.74724. However, It's still better than random guessing (0.5) and also better than our default Random Forest which was used as baseline (0.60101).
 
 
 ## V. Conclusion
 
-# FALTA
 ### Free-Form Visualization
+Below is the AUC curve plot, based on validation results, which shows that the model performed better than random guessing and was stable in all 5-folds.
 
-final AUC curve
+![XGBoost score](home_credit/images/auc_curve.png)
 
-
-In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
 
 ### Reflection
 The process used for this project was comprised of 5 major tasks:
