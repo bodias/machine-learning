@@ -9,6 +9,8 @@ This project uses data from a kaggle challange named **Home Credit Default Risk*
 
 The dataset is a 688MB zipped file that can be download [here](https://www.kaggle.com/c/home-credit-default-risk/data).
 
+* The approved capstone proposal is the file "proposal.pdf"
+* The final capstone report is the file "report.pdf"
 * All the unziped csv files should be placed under the **"home_credit/data"** directory.
 * The ipython notebook which generated this analysis can be acessed in **"home_credit/capstone_report.ipynb"**
 
