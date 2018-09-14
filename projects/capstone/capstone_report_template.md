@@ -164,7 +164,7 @@ The implementation consists of training and evaluate two classification algorith
 #### Random Forest
 The baseline model, Random Forest, will be trained with the **preprocessed train data, without NaN values**. During this stage the sklearn *RandomForestClassifier()* will be used with its default parameters, using cross-validation with 5 folds. The scoring function is 'roc_auc'.
 
-![Random Forest score](home_credit/images/baseline_score.png)
+![Random Forest score](home_credit/images/baseline_score_data.png)
 
 The averaged AUC score over the validation data was 0.6318.
 
@@ -172,12 +172,12 @@ The averaged AUC score over the validation data was 0.6318.
 #### XGBoost
 Now the competition winner XGBoost will be trained with the **preprocessed train data, including NaN values**. As discussed before in this document, XGBoost can handle missing data and so it will be used with its default parameters. The remaining settings will be kept : cross-validation with 5 folds and scoring function is 'roc_auc'.
 
-![XGBoost score](home_credit/images/xgboost_score.png)
+![XGBoost score](home_credit/images/xgboost_score_data.png)
 
 The averaged AUC score over the validation data was 0.7513.
 
 ### Refinement
-The first results with default parameters were not bad, and we can clearly see that XGBoost is more robust than Random Forest. However, we can make use of a well known technique for parameter optimization called Grid-search. Grid-searching is the process of scanning the data to configure optimal parameters for a given model. Depending on the type of model utilized, certain parameters are necessary. It is important to note that Grid-searching can be extremely computationally expensive and may take your machine quite a long time to run. Grid-Search will build a model on each parameter combination possible. It iterates through every parameter combination and stores a model for each combination.
+The first results with default parameters were not bad, and we can clearly see that XGBoost is more robust than Random Forest. Also, the training validation score on Random Forest suggests that this first model is overfitting the data. We can try to improve model results bu using a well known technique for parameter optimization called Grid-search. Grid-searching is the process of scanning the data to configure optimal parameters for a given model. Depending on the type of model utilized, certain parameters are necessary. It is important to note that Grid-searching can be extremely computationally expensive and may take your machine quite a long time to run. Grid-Search will build a model on each parameter combination possible. It iterates through every parameter combination and stores a model for each combination.
 
 Due to the lack of computational resources, the number of parameters and range of each one will be limited. The table below shows each parameter that will be tested and their possible values. First, let's setup the parameters for Random Forest:
 
@@ -198,7 +198,7 @@ Next, let's perform a grid search on XGBoost.
 | **gamma**             |    [i/10.0 for i in range(0,5)]
 | **n_estimators**      |    [200,500]     |    
 
-The configuration above resulted in 120 models (4 x 3 x 5 x 2) and took approximately 2711 seconds (~45 minutes) to train all the models. The validation AUC score for the best model selected by the Grid Search was 0.7600. The previous score with default parameters was 0.7513, so It did't improve enough the score to justify the long time running grid search.
+The configuration above resulted in 120 models (4 x 3 x 5 x 2) and took more than 12 hours to train all the models. The validation AUC score for the best model selected by the Grid Search was 0.7600. The previous score with default parameters was 0.7513, so It did't improve enough the score to justify the long time running grid search.
 
 
 ## IV. Results
@@ -219,15 +219,14 @@ With this model in hand, we made predictions over the unlabeled test data set pr
 The optimized XGBoost scored **0.74724** on the private leaderboard, which is calculated with approximately 80% of the test data, according to Kaggle. Based on the final leaderbord scores, this result is not so far from the best score - 0.80570.
 
 
-# FALTA
 ### Justification
 Both selected models are widely used as a classifier for tabular structured data with a decent performance. Based on the achieved results, we proved the hypothesis that XGBoost performs better than Random Forest, without much penalty from a computational resources perspective. Below is a table that summarizes all the runs. The one __***highlited***__ was the best score achieved.
 
 |  Algorithm                         | AUC Validation    |   AUC Test (kaggle)| Training time |
 | :---------------------------------:| :---------------: | :----------------: |:---------------: |
-| **Random Forest CV5 - default**    |      0.6317       |     0.60101        |      76.90s      |      
-| **XGBoost CV5 - default**          |      0.7513       |     0.73608       |     707.35s      |
-| **Random Forest CV5 - GridSearch** |      0.7337       |     0.71876       |     549.21s      |      
+| *Random Forest CV5 - default*    |      0.6318       |     0.60101        |      76.90s      |      
+| XGBoost CV5 - default          |      0.7513       |     0.73608       |     707.35s      |
+| Random Forest CV5 - GridSearch |      0.7337       |     0.71876       |     549.21s      |      
 | __***XGBoost CV5 - GridSearch***__ |      0.7600       |     0.74724       |     1742.33s     |     
 
 The best result achieved in the private leaderboard is 0.80570. With a simple approach for feature engineering the XGBoost model proposed by this document achieved 0.74724. However, It's still better than random guessing (0.5) and also better than our default Random Forest which was used as baseline (0.60101).
@@ -254,15 +253,3 @@ Among all these steps, the Exploratory Analysis was by far the most difficult ta
 ### Improvement
 From a machine learning perspective, there is another tree based algorithm called LightGBM that could be tested against XGBoost. It has proven to be a good option for classification problems and it's being adopted as one of the most used algorithms on kaggle competitions. Also, Bayesian optimization methods for hyperparameter tuning could have helped find the best set of hyperparameters for this problem. 
 I believe as a future work I would test LightGBM, Bayesian optimization and also would spend more time analysing each feature and try to come up with new features to improve the score.
-
------------
-
-**Before submitting, ask yourself. . .**
-
-- Does the project report you’ve written follow a well-organized structure similar to that of the project template?
-- Is each section (particularly **Analysis** and **Methodology**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
-- Would the intended audience of your project be able to understand your analysis, methods, and results?
-- Have you properly proof-read your project report to assure there are minimal grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
-- Is the code that implements your solution easily readable and properly commented?
-- Does the code execute without error and produce results similar to those reported?
